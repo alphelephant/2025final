@@ -281,7 +281,7 @@ void PlayScene::OnMouseUp(int button, int mx, int my) {
     IScene::OnMouseUp(button, mx, my);
     if ((button & 1)&&shovelMode && selectedTurret) {
         // 移除塔並返還金錢
-        mapState[y][x] = TILE_DIRT;  // 恢復地面狀態
+        mapState[y][x] = TILE_FLOOR;  // 恢復地面狀態
         EarnMoney(selectedTurret->GetPrice()/3);  // 返還金額
         for (auto &obj : BulletGroup->GetObjects()) {
             auto beam = dynamic_cast<Beam*>(obj);
