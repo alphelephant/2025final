@@ -26,7 +26,10 @@ void StartScene::Initialize() {
     int halfH = h / 2;
     Engine::ImageButton *btn;
 
-    AddNewObject(new Engine::Label("Tower Defense", "pirulen.ttf", 120, halfW, halfH / 3 + 50, 10, 255, 255, 255, 0.5, 0.5));
+    // 加入背景圖片（請依你的圖片路徑調整）
+    AddNewObject(new Engine::Image("stage-select/background.png", 0, 0, w, h));
+
+    AddNewObject(new Engine::Label("Tower Defense","pirulen.ttf", 120, halfW, halfH / 3 + 50, 10, 255, 255, 255, 0.5, 0.5));
 
     btn = new Engine::ImageButton("stage-select/dirt.png", "stage-select/floor.png", halfW - 200, halfH / 2 + 200, 400, 100);
     btn->SetOnClickCallback(std::bind(&StartScene::PlayOnClick, this, 1));
@@ -37,6 +40,8 @@ void StartScene::Initialize() {
     btn->SetOnClickCallback(std::bind(&StartScene::SettingsOnClick, this, 2));
     AddNewControlObject(btn);
     AddNewObject(new Engine::Label("Settings", "pirulen.ttf", 48, halfW, halfH * 3 / 2, 0, 0, 0, 255, 0.5, 0.5));
+
+
 }
 void StartScene::Terminate() {
     IScene::Terminate();
