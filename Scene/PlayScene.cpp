@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "Enemy/Enemy.hpp"
+#include "Enemy/fighterEnemy.hpp"
 #include "Enemy/SoldierEnemy.hpp"
 #include "Enemy/SuicideEnemy.hpp"
 #include "Enemy/TankEnemy.hpp"
@@ -186,6 +187,9 @@ void PlayScene::Update(float deltaTime) {
                 break;
             case 4:
                 EnemyGroup->AddNewObject(enemy = new SuicideEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
+                break;
+            case 5:
+                EnemyGroup->AddNewObject(enemy = new fighterEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
                 break;
             default:
                 continue;
@@ -375,7 +379,10 @@ void PlayScene::OnKeyDown(int keyCode) {
     } else if (keyCode == ALLEGRO_KEY_W) {
         // Hotkey for LaserTurret.
         UIBtnClicked(1);
-    }
+    }/*else if (keyCode == ALLEGRO_KEY_E) {
+        // Hotkey for LaserSource.
+        UIBtnClicked(2);
+    }*/
     else if (keyCode >= ALLEGRO_KEY_0 && keyCode <= ALLEGRO_KEY_9) {
         // Hotkey for Speed up.
         SpeedMult = keyCode - ALLEGRO_KEY_0;
