@@ -379,10 +379,10 @@ void PlayScene::OnKeyDown(int keyCode) {
     } else if (keyCode == ALLEGRO_KEY_W) {
         // Hotkey for LaserTurret.
         UIBtnClicked(1);
-    }/*else if (keyCode == ALLEGRO_KEY_E) {
+    }else if (keyCode == ALLEGRO_KEY_E) {
         // Hotkey for LaserSource.
         UIBtnClicked(2);
-    }*/
+    }
     else if (keyCode >= ALLEGRO_KEY_0 && keyCode <= ALLEGRO_KEY_9) {
         // Hotkey for Speed up.
         SpeedMult = keyCode - ALLEGRO_KEY_0;

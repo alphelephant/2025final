@@ -16,7 +16,6 @@ SuicideEnemy::SuicideEnemy(float x, float y)
 {}
 void SuicideEnemy::OnExplode(){
     getPlayScene()->EffectGroup->AddNewObject(new ExplosionEffect(Position.x, Position.y));
-    getPlayScene()->EffectGroup->AddNewObject(new ShockwaveEffect(Position.x, Position.y, explosionRadius));
     std::random_device dev;
     std::mt19937 rng(dev());
     std::uniform_int_distribution<std::mt19937::result_type> distId(1, 3);
@@ -31,6 +30,7 @@ void SuicideEnemy::SelfDestruct() {
     isExploded = true;  // 標記為已自爆
     auto scene = getPlayScene();
     //  效果：爆炸動畫與特效
+    getPlayScene()->EffectGroup->AddNewObject(new ShockwaveEffect(Position.x, Position.y, explosionRadius));
     OnExplode(); 
     AudioHelper::PlayAudio("shockwave.ogg");
 

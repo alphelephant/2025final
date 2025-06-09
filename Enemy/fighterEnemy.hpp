@@ -4,11 +4,11 @@
 
 class fighterEnemy : public Enemy {
 private:
-    float coolDown=0.3;
+    float coolDown=0.3f; // 冷卻時間
     float reload=0;
     float triggerRadius;
     float explosionRadius;
-    void SelfDestruct();
+    void Destruct();
     void OnExplode()override;
 public:
     fighterEnemy(float x, float y);

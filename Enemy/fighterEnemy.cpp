@@ -10,13 +10,13 @@
 
 fighterEnemy::fighterEnemy(float x, float y)
   : Enemy("play/enemy-9.png", x, y,
-          /*radius=*/20, /*speed=*/500,
-          /*hp=*/20, /*money=*/100),
+          /*radius=*/20, /*speed=*/200,
+          /*hp=*/100, /*money=*/1),
     triggerRadius(200), explosionRadius(250)
 {}
 void fighterEnemy::OnExplode(){
     getPlayScene()->EffectGroup->AddNewObject(new ExplosionEffect(Position.x, Position.y));
-    getPlayScene()->EffectGroup->AddNewObject(new ShockwaveEffect(Position.x, Position.y, explosionRadius));
+    
     std::random_device dev;
     std::mt19937 rng(dev());
     std::uniform_int_distribution<std::mt19937::result_type> distId(1, 3);
@@ -26,10 +26,10 @@ void fighterEnemy::OnExplode(){
         getPlayScene()->GroundEffectGroup->AddNewObject(new DirtyEffect("play/dirty-" + std::to_string(distId(rng)) + ".png", dist(rng), Position.x, Position.y));
     }
 }
-void fighterEnemy::SelfDestruct() {
+void fighterEnemy::Destruct() {
     auto scene = getPlayScene();
     //  效果：爆炸動畫與特效
-    OnExplode(); 
+    getPlayScene()->EffectGroup->AddNewObject(new ShockwaveEffect(Position.x, Position.y, explosionRadius));
     AudioHelper::PlayAudio("shockwave.ogg");
 
     // 對範圍內的塔台造成傷害
@@ -38,8 +38,8 @@ void fighterEnemy::SelfDestruct() {
         auto turret = dynamic_cast<Turret*>(obj);
         if (!turret) continue;
         float dist = (turret->Position - Position).Magnitude();
-        if (dist <= explosionRadius && reload <= 0) {
-            reload = coolDown; // 重置冷卻時間
+        if (dist <= explosionRadius) {
+            
             turret->Hit(10); // 例如造成50點傷害，你可依需求調整
         }
     }
@@ -58,8 +58,9 @@ void fighterEnemy::Update(float deltaTime) {
         auto turret = dynamic_cast<Turret*>(obj);
         if (!turret) continue;
         float dist = (turret->Position - Position).Magnitude();
-        if (dist <= triggerRadius) {
-            SelfDestruct();
+        if (dist <= triggerRadius && reload <= 0) {
+            reload = coolDown; // 重置冷卻時間
+            Destruct();
             return;  // 自爆後不再繼續
         }
     }
