@@ -422,10 +422,20 @@ void PlayScene::ReadMap() {
     for (int i = 0; i < MapHeight; i++) {
         for (int j = 0; j < MapWidth; j++) {
             const int num = mapData[i * MapWidth + j];
-            mapState[i][j] = num ? TILE_FLOOR : TILE_DIRT;
+            //mapState[i][j] = num ? TILE_FLOOR : TILE_DIRT;
+            switch (num){
+                case 0:
+                    mapState[i][j] = TILE_DIRT;
+                    break;
+                case 1:
+                    mapState[i][j] = TILE_FLOOR;
+                    break;
+                default:
+                    break;
+            }
             if (num)
                 TileMapGroup->AddNewObject(new Engine::Image("play/floor.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
-            else
+            else if (num == 1)
                 TileMapGroup->AddNewObject(new Engine::Image("play/dirt.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
         }
     }

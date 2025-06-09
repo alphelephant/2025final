@@ -50,6 +50,7 @@ public:
         TILE_DIRT,
         TILE_FLOOR,
         TILE_OCCUPIED,
+        TILE_HIGH,
     };
     Group *TileMapGroup;
     Group *GroundEffectGroup;
