@@ -44,7 +44,7 @@ void SuicideEnemy::SelfDestruct() {
     //刪子彈  
     std::vector<Beam*> beamsToRemove;
     auto bulletObjects = scene->BulletGroup->GetObjects();
-    for (auto obj : scene->BulletGroup->GetObjects()) {
+    for (auto obj : bulletObjects) {
         auto beam = dynamic_cast<Beam*>(obj);
         if (beam) {
             beamsToRemove.push_back(beam);
@@ -71,7 +71,7 @@ void SuicideEnemy::SelfDestruct() {
     // 摧毀範圍內的塔台
     std::vector<Turret*> turretsToRemove;
     auto towerObjects = scene->TowerGroup->GetObjects();
-    for (auto obj : scene->TowerGroup->GetObjects()) {
+    for (auto obj : towerObjects) {
         auto turret = dynamic_cast<Turret*>(obj);
         if (!turret) continue;
         float dist = (turret->Position - Position).Magnitude();
