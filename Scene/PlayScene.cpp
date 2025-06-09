@@ -435,7 +435,7 @@ void PlayScene::ReadMap() {
             }
             if (num)
                 TileMapGroup->AddNewObject(new Engine::Image("play/floor.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
-            else if (num == 1)
+            else if (num == 0)
                 TileMapGroup->AddNewObject(new Engine::Image("play/dirt.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
         }
     }

@@ -23,9 +23,13 @@ void Turret::Hit(float damage) {
     if (hp <= 0) {
         // 砲台被摧毀時的處理
         auto scene = getPlayScene();
-        scene->TowerGroup->RemoveObject(GetObjectIterator());
+       
         // 可加上爆炸特效、音效等
         // AudioHelper::PlayAudio("explosion.wav");
+        int tx = static_cast<int>(this->Position.x) / 64;
+        int ty = static_cast<int>(this->Position.y) / 64;
+        scene->TowerGroup->RemoveObject(GetObjectIterator());
+        scene->mapState[ty][tx] = PlayScene::TileType::TILE_FLOOR;  // 恢復地面狀態
     }
 }
 void Turret::Update(float deltaTime) {
