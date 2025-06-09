@@ -34,41 +34,7 @@ void SuicideEnemy::SelfDestruct() {
     OnExplode(); 
     AudioHelper::PlayAudio("shockwave.ogg");
 
-    /*//刪子彈  
-    for (auto &obj : scene->BulletGroup->GetObjects()) {
-        auto beam = dynamic_cast<Beam*>(obj);
-        if (beam ) {
-            scene->BulletGroup->RemoveObject(beam->GetObjectIterator());
-        }
-    }*/
-    //刪子彈  
-    std::vector<Beam*> beamsToRemove;
-    auto bulletObjects = scene->BulletGroup->GetObjects();
-    for (auto obj : bulletObjects) {
-        auto beam = dynamic_cast<Beam*>(obj);
-        if (beam) {
-            beamsToRemove.push_back(beam);
-        }
-    }
-    for (auto beam : beamsToRemove) {
-        scene->BulletGroup->RemoveObject(beam->GetObjectIterator());
-    }
-    
     /*// 摧毀範圍內的塔台
-    for (auto &obj : scene->TowerGroup->GetObjects()) {
-        auto turret = dynamic_cast<Turret*>(obj);
-        if (!turret) continue;
-        float dist = (turret->Position - Position).Magnitude();
-        if (dist <= explosionRadius) {
-            int tx = static_cast<int>(turret->Position.x) / 64;
-            int ty = static_cast<int>(turret->Position.y) / 64;
-            scene->mapState[ty][tx] = PlayScene::TileType::TILE_FLOOR;  // 恢復地面狀態
-            //scene->BulletGroup->RemoveObject(turret->GetObjectIterator());
-            scene->TowerGroup->RemoveObject(turret->GetObjectIterator());
-        }
-    }*/
-    // ...existing code...
-    // 摧毀範圍內的塔台
     std::vector<Turret*> turretsToRemove;
     auto towerObjects = scene->TowerGroup->GetObjects();
     for (auto obj : towerObjects) {
@@ -84,6 +50,17 @@ void SuicideEnemy::SelfDestruct() {
     }
     for (auto turret : turretsToRemove) {
         scene->TowerGroup->RemoveObject(turret->GetObjectIterator());
+    }*/
+    // ...existing code...
+    // 摧毀範圍內的塔台 → 改為對範圍內的塔台造成傷害
+    auto towerObjects = scene->TowerGroup->GetObjects();
+    for (auto obj : towerObjects) {
+        auto turret = dynamic_cast<Turret*>(obj);
+        if (!turret) continue;
+        float dist = (turret->Position - Position).Magnitude();
+        if (dist <= explosionRadius) {
+            turret->Hit(9999); // 例如造成50點傷害，你可依需求調整
+        }
     }
     // ...existing code...
 
