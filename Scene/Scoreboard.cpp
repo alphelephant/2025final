@@ -44,6 +44,7 @@ void Scoreboard::Initialize() {
     AddNewControlObject(btn);
     AddNewObject(new Engine::Label("Back", "pirulen.ttf", 36, halfW, halfH * 3 / 2 + 80 +37, 0, 0, 0, 255, 0.5, 0.5));
 
+    // 上一頁按鈕
     btn = new Engine::ImageButton("stage-select/dirt.png", "stage-select/floor.png", halfW - 500, halfH * 3 / 2 + 80, 300, 75);
     btn->SetOnClickCallback(std::bind(&Scoreboard::PrevPageOnClick, this));
     AddNewControlObject(btn);

@@ -27,19 +27,34 @@ void SuicideEnemy::OnExplode(){
     }
 }
 void SuicideEnemy::SelfDestruct() {
+    if (isExploded) return;  // 如果已經自爆，則不再執行
+    isExploded = true;  // 標記為已自爆
     auto scene = getPlayScene();
     //  效果：爆炸動畫與特效
     OnExplode(); 
     AudioHelper::PlayAudio("shockwave.ogg");
-    //刪子彈  
+
+    /*//刪子彈  
     for (auto &obj : scene->BulletGroup->GetObjects()) {
         auto beam = dynamic_cast<Beam*>(obj);
         if (beam ) {
             scene->BulletGroup->RemoveObject(beam->GetObjectIterator());
         }
+    }*/
+    //刪子彈  
+    std::vector<Beam*> beamsToRemove;
+    auto bulletObjects = scene->BulletGroup->GetObjects();
+    for (auto obj : bulletObjects) {
+        auto beam = dynamic_cast<Beam*>(obj);
+        if (beam) {
+            beamsToRemove.push_back(beam);
+        }
     }
-
-    // 摧毀範圍內的塔台
+    for (auto beam : beamsToRemove) {
+        scene->BulletGroup->RemoveObject(beam->GetObjectIterator());
+    }
+    
+    /*// 摧毀範圍內的塔台
     for (auto &obj : scene->TowerGroup->GetObjects()) {
         auto turret = dynamic_cast<Turret*>(obj);
         if (!turret) continue;
@@ -50,16 +65,34 @@ void SuicideEnemy::SelfDestruct() {
             scene->mapState[ty][tx] = PlayScene::TileType::TILE_FLOOR;  // 恢復地面狀態
             //scene->BulletGroup->RemoveObject(turret->GetObjectIterator());
             scene->TowerGroup->RemoveObject(turret->GetObjectIterator());
-            
-            
+        }
+    }*/
+    // ...existing code...
+    // 摧毀範圍內的塔台
+    std::vector<Turret*> turretsToRemove;
+    auto towerObjects = scene->TowerGroup->GetObjects();
+    for (auto obj : towerObjects) {
+        auto turret = dynamic_cast<Turret*>(obj);
+        if (!turret) continue;
+        float dist = (turret->Position - Position).Magnitude();
+        if (dist <= explosionRadius) {
+            int tx = static_cast<int>(turret->Position.x) / 64;
+            int ty = static_cast<int>(turret->Position.y) / 64;
+            scene->mapState[ty][tx] = PlayScene::TileType::TILE_FLOOR;  // 恢復地面狀態
+            turretsToRemove.push_back(turret);
         }
     }
+    for (auto turret : turretsToRemove) {
+        scene->TowerGroup->RemoveObject(turret->GetObjectIterator());
+    }
+    // ...existing code...
 
     // 3) 自己也從場上移除
     scene->EnemyGroup->RemoveObject(objectIterator);
 }
 
 void SuicideEnemy::Update(float deltaTime) {
+    if (isExploded) return;  // 如果已經自爆，則不再更新
     // 1) 照常移動、追蹤路徑
     Enemy::Update(deltaTime);
 
