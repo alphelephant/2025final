@@ -65,6 +65,10 @@ void SuicideEnemy::SelfDestruct() {
     // ...existing code...
 
     // 3) 自己也從場上移除
+    for (auto &it : lockedTurrets)
+        it->Target = nullptr;
+    for (auto &it : lockedBullets)
+        it->Target = nullptr;
     scene->EnemyGroup->RemoveObject(objectIterator);
 }
 
