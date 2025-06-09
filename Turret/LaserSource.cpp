@@ -11,7 +11,7 @@
 #include "Scene/PlayScene.hpp"
 
 const int LaserSource::Price = 500;
-LaserSource::LaserSource(float x, float y, float rotation) : Turret("play/tower-base.png", "play/turret-7.png", x, y, 450, Price, 2.0f) {
+LaserSource::LaserSource(float x, float y, float rotation) : Turret("play/tower-base.png", "play/turret-7.png", x, y, 450, Price, 2.0f, 100) {
     Anchor.y += 8.0f / GetBitmapHeight();
     Rotation = rotation;
 }

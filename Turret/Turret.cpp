@@ -15,8 +15,18 @@
 PlayScene *Turret::getPlayScene() {
     return dynamic_cast<PlayScene *>(Engine::GameEngine::GetInstance().GetActiveScene());
 }
-Turret::Turret(std::string imgBase, std::string imgTurret, float x, float y, float radius, int price, float coolDown) : Sprite(imgTurret, x, y), price(price), coolDown(coolDown), imgBase(imgBase, x, y) {
+Turret::Turret(std::string imgBase, std::string imgTurret, float x, float y, float radius, int price, float coolDown, float hp) : Sprite(imgTurret, x, y), price(price), coolDown(coolDown), imgBase(imgBase, x, y),hp(hp) {
     CollisionRadius = radius;
+}
+void Turret::Hit(float damage) {
+    hp -= damage;
+    if (hp <= 0) {
+        // 砲台被摧毀時的處理
+        auto scene = getPlayScene();
+        scene->TowerGroup->RemoveObject(GetObjectIterator());
+        // 可加上爆炸特效、音效等
+        // AudioHelper::PlayAudio("explosion.wav");
+    }
 }
 void Turret::Update(float deltaTime) {
     Sprite::Update(deltaTime);

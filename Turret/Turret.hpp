@@ -15,6 +15,7 @@ protected:
     float coolDown;
     float reload = 0;
     float rotateRadian = 2 * ALLEGRO_PI;
+    float hp;
     Sprite imgBase;
     std::list<Turret *>::iterator lockedTurretIterator;
     PlayScene *getPlayScene();
@@ -27,9 +28,10 @@ public:
     bool Preview = false;
     bool BeamCoolDown = true;
     Enemy *Target = nullptr;
-    Turret(std::string imgBase, std::string imgTurret, float x, float y, float radius, int price, float coolDown);
+    Turret(std::string imgBase, std::string imgTurret, float x, float y, float radius, int price, float coolDown, float hp);
     void Update(float deltaTime) override;
     void Draw() const override;
     int GetPrice() const;
+    void Hit(float damage); 
 };
 #endif   // TURRET_HPP
