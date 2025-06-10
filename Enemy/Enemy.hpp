@@ -19,6 +19,7 @@ protected:
     int money;
     PlayScene *getPlayScene();
     virtual void OnExplode();
+    virtual void CreateBullet();
 
 public:
     float reachEndTime;
