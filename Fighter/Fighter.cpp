@@ -21,7 +21,7 @@
 PlayScene *Fighter::getPlayScene() {
     return dynamic_cast<PlayScene *>(Engine::GameEngine::GetInstance().GetActiveScene());
 }
-void Fighter::OnExplode() {
+/*void Fighter::OnExplode() {
     getPlayScene()->EffectGroup->AddNewObject(new ExplosionEffect(Position.x, Position.y));
     std::random_device dev;
     std::mt19937 rng(dev());
@@ -31,26 +31,26 @@ void Fighter::OnExplode() {
         // Random add 10 dirty effects.
         getPlayScene()->GroundEffectGroup->AddNewObject(new DirtyEffect("play/dirty-" + std::to_string(distId(rng)) + ".png", dist(rng), Position.x, Position.y));
     }
-}
-Fighter::Fighter(std::string img, float x, float y, float radius, float speed, float hp, int money) : Engine::Sprite(img, x, y), speed(speed), hp(hp), money(money) {
+}*/
+Fighter::Fighter(std::string img, float x, float y, float radius, float speed, float hp, float attackRange, float attackSpeed) : Engine::Sprite(img, x, y), speed(speed), hp(hp), attackRange(attackRange), attackSpeed(attackSpeed) {
     CollisionRadius = radius;
-    reachEndTime = 0;
+    reload = 0;
+    TargetEnemy = nullptr;
 }
 void Fighter::Hit(float damage) {
     hp -= damage;
     if (hp <= 0) {
-        OnExplode();
+        //OnExplode();
         // Remove all turret's reference to target.
-        for (auto &it : lockedTurrets)
+        /*for (auto &it : lockedEnemy)
             it->Target = nullptr;
         for (auto &it : lockedBullets)
-            it->Target = nullptr;
-        getPlayScene()->EarnMoney(money);
-        getPlayScene()->EnemyGroup->RemoveObject(objectIterator);
-        AudioHelper::PlayAudio("explosion.wav");
+            it->Target = nullptr;*///這邊有點問題之後再改
+        getPlayScene()->FighterGroup->RemoveObject(objectIterator);
+        //AudioHelper::PlayAudio("explosion.wav");
     }
 }
-void Fighter::UpdatePath(const std::vector<std::vector<int>> &mapDistance) {
+void Fighter::UpdatePath(const std::vector<std::vector<int>> &FigherDistance) {
     int x = static_cast<int>(floor(Position.x / PlayScene::BlockSize));
     int y = static_cast<int>(floor(Position.y / PlayScene::BlockSize));
     if (x < 0) x = 0;
@@ -58,10 +58,10 @@ void Fighter::UpdatePath(const std::vector<std::vector<int>> &mapDistance) {
     if (y < 0) y = 0;
     if (y >= PlayScene::MapHeight) y = PlayScene::MapHeight - 1;
     Engine::Point pos(x, y);
-    int num = mapDistance[y][x];
+    int num = FigherDistance[y][x];
     if (num == -1) {
         num = 0;
-        Engine::LOG(Engine::ERROR) << "Fighter path finding error";
+        Engine::LOG(Engine::ERROR) << "Enemy path finding error";
     }
     path = std::vector<Engine::Point>(num + 1);
     while (num != 0) {
@@ -69,7 +69,7 @@ void Fighter::UpdatePath(const std::vector<std::vector<int>> &mapDistance) {
         for (auto &dir : PlayScene::directions) {
             int x = pos.x + dir.x;
             int y = pos.y + dir.y;
-            if (x < 0 || x >= PlayScene::MapWidth || y < 0 || y >= PlayScene::MapHeight || mapDistance[y][x] != num - 1)
+            if (x < 0 || x >= PlayScene::MapWidth || y < 0 || y >= PlayScene::MapHeight || FigherDistance[y][x] != num - 1)
                 continue;
             nextHops.emplace_back(x, y);
         }
@@ -81,39 +81,38 @@ void Fighter::UpdatePath(const std::vector<std::vector<int>> &mapDistance) {
         path[num] = pos;
         num--;
     }
-    path[0] = PlayScene::EndGridPoint;
+    path[0] = Engine::Point(0, 0);
 }
 void Fighter::Update(float deltaTime) {
-    // Pre-calculate the velocity.
     float remainSpeed = speed * deltaTime;
     while (remainSpeed != 0) {
-        if (path.empty()) {
-            // Reach end point.
-            Hit(hp);
-            getPlayScene()->Hit();
-            reachEndTime = 0;
-            return;
+            if (path.empty()) {
+                // Reach end point.
+                Hit(hp);
+                getPlayScene()->Hit();
+                reachEndTime = 0;
+                return;
+            }
+            Engine::Point target = path.back() * PlayScene::BlockSize + Engine::Point(PlayScene::BlockSize / 2, PlayScene::BlockSize / 2);
+            Engine::Point vec = target - Position;
+            // Add up the distances:
+            // 1. to path.back()
+            // 2. path.back() to border
+            // 3. All intermediate block size
+            // 4. to end point
+            reachEndTime = (vec.Magnitude() + (path.size() - 1) * PlayScene::BlockSize - remainSpeed) / speed;
+            Engine::Point normalized = vec.Normalize();
+            if (remainSpeed - vec.Magnitude() > 0) {
+                Position = target;
+                path.pop_back();
+                remainSpeed -= vec.Magnitude();
+            } else {
+                Velocity = normalized * remainSpeed / deltaTime;
+                remainSpeed = 0;
+            }
         }
-        Engine::Point target = path.back() * PlayScene::BlockSize + Engine::Point(PlayScene::BlockSize / 2, PlayScene::BlockSize / 2);
-        Engine::Point vec = target - Position;
-        // Add up the distances:
-        // 1. to path.back()
-        // 2. path.back() to border
-        // 3. All intermediate block size
-        // 4. to end point
-        reachEndTime = (vec.Magnitude() + (path.size() - 1) * PlayScene::BlockSize - remainSpeed) / speed;
-        Engine::Point normalized = vec.Normalize();
-        if (remainSpeed - vec.Magnitude() > 0) {
-            Position = target;
-            path.pop_back();
-            remainSpeed -= vec.Magnitude();
-        } else {
-            Velocity = normalized * remainSpeed / deltaTime;
-            remainSpeed = 0;
-        }
-    }
-    Rotation = atan2(Velocity.y, Velocity.x);
-    Sprite::Update(deltaTime);
+        Rotation = atan2(Velocity.y, Velocity.x);
+        Sprite::Update(deltaTime);
 }
 void Fighter::Draw() const {
     Sprite::Draw();

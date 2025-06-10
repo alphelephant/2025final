@@ -60,6 +60,7 @@ public:
     Group *EnemyGroup;
     Group *EffectGroup;
     Group *UIGroup;
+    Group *FighterGroup;
     Engine::Label *UIMoney;
     Engine::Label *UILives;
     Engine::Image *imgTarget;
@@ -67,6 +68,7 @@ public:
     Turret *preview;
     std::vector<std::vector<TileType>> mapState;
     std::vector<std::vector<int>> mapDistance;
+    std::vector<std::vector<int>> FightDistance;
     std::list<std::pair<int, float>> enemyWaveData;
     std::list<int> keyStrokes;
     int GetScore() const { return score; }
@@ -90,6 +92,7 @@ public:
     void UIBtnClicked(int id);
     bool CheckSpaceValid(int x, int y);
     std::vector<std::vector<int>> CalculateBFSDistance();
+    std::vector<std::vector<int>> CalculateDistance();
     // void ModifyReadMapTiles();
 };
 #endif   // PLAYSCENE_HPP

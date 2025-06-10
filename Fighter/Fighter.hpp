@@ -17,18 +17,23 @@ protected:
     std::vector<Engine::Point> path;
     float speed;
     float hp;
-    int money;
+    float attackRange;
+    float attackSpeed;
+    float reload = 0;
     PlayScene *getPlayScene();
-    virtual void OnExplode();
+    //virtual void OnExplode();
+    Enemy *TargetEnemy = nullptr;
 
 public:
     float reachEndTime;
-    std::list<Turret *> lockedTurrets;
+    std::list<Enemy *> lockedEnemy;
     std::list<Bullet *> lockedBullets;
-    Fighter(std::string img, float x, float y, float radius, float speed, float hp, int money);
+    Fighter(std::string img, float x, float y, float radius, float speed, float hp, float attackRange, float attackSpeed);
     void Hit(float damage);
     void UpdatePath(const std::vector<std::vector<int>> &mapDistance);
     void Update(float deltaTime) override;
+    void AttackEnemy(Enemy *enemy);
+    void AttackBase();
     void Draw() const override;
 };
 #endif   // FIGHTER_HPP

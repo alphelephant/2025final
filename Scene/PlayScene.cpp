@@ -28,6 +28,8 @@
 #include "UI/Animation/Plane.hpp"
 #include "UI/Component/Label.hpp"
 #include "Bullet/Beam.hpp"
+#include "Fighter/Fighter.hpp"
+#include "Fighter/TankFighter.hpp"
 
 // TODO HACKATHON-4 (1/3): Trace how the game handles keyboard input.
 // TODO HACKATHON-4 (2/3): Find the cheat code sequence in this file.
@@ -66,11 +68,13 @@ void PlayScene::Initialize() {
     AddNewObject(EnemyGroup = new Group());
     AddNewObject(BulletGroup = new Group());
     AddNewObject(EffectGroup = new Group());
+    AddNewObject(FighterGroup = new Group());
     // Should support buttons.
     AddNewControlObject(UIGroup = new Group());
     ReadMap();
     ReadEnemyWave();
     mapDistance = CalculateBFSDistance();
+    FightDistance = CalculateDistance();
     ConstructUI();
     imgTarget = new Engine::Image("play/target.png", 0, 0);
     imgTarget->Visible = false;
@@ -216,9 +220,9 @@ void PlayScene::Draw() const {
         // Draw reverse BFS distance on all reachable blocks.
         for (int i = 0; i < MapHeight; i++) {
             for (int j = 0; j < MapWidth; j++) {
-                if (mapDistance[i][j] != -1) {
+                if (FightDistance[i][j] != -1) {
                     // Not elegant nor efficient, but it's quite enough for debugging.
-                    Engine::Label label(std::to_string(mapDistance[i][j]), "pirulen.ttf", 32, (j + 0.5) * BlockSize, (i + 0.5) * BlockSize);
+                    Engine::Label label(std::to_string(FightDistance[i][j]), "pirulen.ttf", 32, (j + 0.5) * BlockSize, (i + 0.5) * BlockSize);
                     label.Anchor = Engine::Point(0.5, 0.5);
                     label.Draw();
                 }
@@ -441,7 +445,7 @@ void PlayScene::ReadMap() {
                     break;
             }
             if (num==1)
-                TileMapGroup->AddNewObject(new Engine::Image("play/floor.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+                TileMapGroup->AddNewObject(new Engine::Image("play/highground.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
             else if (num == 0)
                 TileMapGroup->AddNewObject(new Engine::Image("play/dirt.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
         }
@@ -494,7 +498,13 @@ void PlayScene::ConstructUI() {
     shl->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 3));
     UIGroup->AddNewControlObject(shl);
     
-
+    //Button 5
+    TurretButton* TankfighterBtn = new TurretButton("play/floor.png", "play/dirt.png",
+        Engine::Sprite("play/tower-base.png", 1294, 136+ 64, 0, 0, 0, 0),
+        Engine::Sprite("play/enemy-4.png", 1294, 136+ 64 - 8, 0, 0, 0, 0), 1294, 136+ 64, /*FighterPrice*/0);
+    TankfighterBtn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 4));
+    UIGroup->AddNewControlObject(TankfighterBtn);
+    
     int w = Engine::GameEngine::GetInstance().GetScreenSize().x;
     int h = Engine::GameEngine::GetInstance().GetScreenSize().y;
     int shift = 135 + 25;
@@ -520,6 +530,18 @@ void PlayScene::UIBtnClicked(int id) {
         preview = new LaserSource(0, 0, 0);
     else if(id == 3 && money >= 10){
         SetShovelMode(true);
+    }
+    else if (id == 4 && money >= /*TankFighterPrice*/0) {
+        // 產生 TankFighter
+        EarnMoney(-0); // 請填入正確價格
+        Engine::Point start = Engine::Point(
+            (EndGridPoint.x - 1)* BlockSize + BlockSize / 2,
+            (EndGridPoint.y )* BlockSize + BlockSize / 2
+        );
+        TankFighter* tankFighter = new TankFighter(start.x, start.y);
+        tankFighter->UpdatePath(FightDistance);
+        FighterGroup->AddNewObject(tankFighter);
+        return;
     }
     if (!preview)
         return;
@@ -556,6 +578,10 @@ bool PlayScene::CheckSpaceValid(int x, int y) {
     mapDistance = map;
     for (auto &it : EnemyGroup->GetObjects())
         dynamic_cast<Enemy *>(it)->UpdatePath(mapDistance);
+
+    FightDistance = CalculateDistance();
+    for (auto &it : FighterGroup->GetObjects())
+        dynamic_cast<Fighter *>(it)->UpdatePath(FightDistance);
     return true;
 }
 std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {
@@ -584,6 +610,31 @@ std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {
             }
         }
         
+    }
+    return map;
+}
+std::vector<std::vector<int>> PlayScene::CalculateDistance() {
+    // BFS from SpawnGridPoint (通常是左上角)
+    std::vector<std::vector<int>> map(MapHeight, std::vector<int>(MapWidth, -1));
+    std::queue<Engine::Point> que;
+    // 檢查起點是否合法
+    if (mapState[0][0] != TILE_DIRT)
+        return map;
+    // 這裡假設 SpawnGridPoint = (-1, 0)，所以實際地圖起點是 (0, 0)
+    que.push(Engine::Point(0, 0));
+    map[0][0] = 0;
+    while (!que.empty()) {
+        Engine::Point p = que.front();
+        que.pop();
+        for (const auto& dir : directions) {
+            int nx = p.x + dir.x;
+            int ny = p.y + dir.y;
+            if (nx >= 0 && nx < MapWidth && ny >= 0 && ny < MapHeight &&
+                map[ny][nx] == -1 && mapState[ny][nx] == TILE_DIRT) {
+                map[ny][nx] = map[p.y][p.x] + 1;
+                que.push(Engine::Point(nx, ny));
+            }
+        }
     }
     return map;
 }
