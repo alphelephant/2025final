@@ -36,6 +36,9 @@ Fighter::Fighter(std::string img, float x, float y, float radius, float speed, f
     CollisionRadius = radius;
     reload = 0;
     TargetEnemy = nullptr;
+    PlayScene* scene = getPlayScene();
+    FindPath = scene->FightDistance;
+    lastGrid = Engine::Point(x, y);
 }
 void Fighter::Hit(float damage) {
     hp -= damage;
@@ -50,7 +53,7 @@ void Fighter::Hit(float damage) {
         //AudioHelper::PlayAudio("explosion.wav");
     }
 }
-void Fighter::UpdatePath(const std::vector<std::vector<int>> &FigherDistance) {
+void Fighter::UpdatePath(const std::vector<std::vector<int>> &FindPath) {
     int x = static_cast<int>(floor(Position.x / PlayScene::BlockSize));
     int y = static_cast<int>(floor(Position.y / PlayScene::BlockSize));
     if (x < 0) x = 0;
@@ -58,10 +61,10 @@ void Fighter::UpdatePath(const std::vector<std::vector<int>> &FigherDistance) {
     if (y < 0) y = 0;
     if (y >= PlayScene::MapHeight) y = PlayScene::MapHeight - 1;
     Engine::Point pos(x, y);
-    int num = FigherDistance[y][x];
+    int num = FindPath[y][x];
     if (num == -1) {
         num = 0;
-        Engine::LOG(Engine::ERROR) << "Enemy path finding error";
+        Engine::LOG(Engine::ERROR) << "Fighter path finding error";
     }
     path = std::vector<Engine::Point>(num + 1);
     while (num != 0) {
@@ -69,7 +72,7 @@ void Fighter::UpdatePath(const std::vector<std::vector<int>> &FigherDistance) {
         for (auto &dir : PlayScene::directions) {
             int x = pos.x + dir.x;
             int y = pos.y + dir.y;
-            if (x < 0 || x >= PlayScene::MapWidth || y < 0 || y >= PlayScene::MapHeight || FigherDistance[y][x] != num - 1)
+            if (x < 0 || x >= PlayScene::MapWidth || y < 0 || y >= PlayScene::MapHeight || FindPath[y][x] != num - 1||  getPlayScene()->mapState[y][x]!=PlayScene::TileType::TILE_DIRT)
                 continue;
             nextHops.emplace_back(x, y);
         }
@@ -81,12 +84,25 @@ void Fighter::UpdatePath(const std::vector<std::vector<int>> &FigherDistance) {
         path[num] = pos;
         num--;
     }
-    path[0] = Engine::Point(0, 0);
+    if(TargetEnemy){
+                int tx = std::clamp(
+        int(TargetEnemy->Position.x / PlayScene::BlockSize),
+        0, PlayScene::MapWidth - 1
+        );
+        int ty = std::clamp(
+        int(TargetEnemy->Position.y / PlayScene::BlockSize),0, PlayScene::MapHeight - 1);
+        path[0] = Engine::Point(tx, ty);
+    }
+    else
+        path[0] = Engine::Point((PlayScene::SpawnGridPoint.x +1) , PlayScene::SpawnGridPoint.y  );
 }
 void Fighter::Update(float deltaTime) {
     float remainSpeed = speed * deltaTime;
     PlayScene* scene = getPlayScene();
     if (TargetEnemy) {
+        FindPath = scene->CalculateDistance(TargetEnemy->Position.x / PlayScene::BlockSize, TargetEnemy->Position.y / PlayScene::BlockSize,
+            Position.x / PlayScene::BlockSize, Position.y / PlayScene::BlockSize);
+        UpdatePath(FindPath);
         Engine::Point diff = TargetEnemy->Position - Position;
         if (diff.Magnitude() > attackRange) {
             if (lockedFighterIterator != std::list<Fighter*>::iterator())
@@ -95,6 +111,11 @@ void Fighter::Update(float deltaTime) {
             lockedFighterIterator = std::list<Fighter*>::iterator();
         }
     }
+    else {
+    // 預設向基地前進的路徑
+        FindPath = getPlayScene()->FightDistance;
+    }
+    UpdatePath(FindPath);
     // 2. 如果沒有目標，尋找最近的敵人
     if (!TargetEnemy) {
         for (auto& obj : scene->EnemyGroup->GetObjects()) {
@@ -110,7 +131,6 @@ void Fighter::Update(float deltaTime) {
         }
     }
     if (TargetEnemy) {
-        ApproachTarget(deltaTime);
         reload -= deltaTime;
         if (reload <= 0) {
             Engine::Point diff = TargetEnemy->Position - Position;
@@ -120,37 +140,39 @@ void Fighter::Update(float deltaTime) {
             }
         }
     }
-    while (remainSpeed != 0 && !TargetEnemy) {
-            if (path.empty()) {
-                // Reach end point.
-                Hit(hp);
-                //getPlayScene()->Hit();
-                reachEndTime = 0;
-                return;
-            }
-            Engine::Point target = path.back() * PlayScene::BlockSize + Engine::Point(PlayScene::BlockSize / 2, PlayScene::BlockSize / 2);
-            Engine::Point vec = target - Position;
-            // Add up the distances:
-            // 1. to path.back()
-            // 2. path.back() to border
-            // 3. All intermediate block size
-            // 4. to end point
-            reachEndTime = (vec.Magnitude() + (path.size() - 1) * PlayScene::BlockSize - remainSpeed) / speed;
-            Engine::Point normalized = vec.Normalize();
-            if (remainSpeed - vec.Magnitude() > 0) {
-                Position = target;
-                path.pop_back();
-                remainSpeed -= vec.Magnitude();
-            } else {
-                Velocity = normalized * remainSpeed / deltaTime;
-                remainSpeed = 0;
-            }
+    while (remainSpeed != 0) {
+        int x = static_cast<int>(floor(Position.x / PlayScene::BlockSize));
+        int y = static_cast<int>(floor(Position.y / PlayScene::BlockSize));
+        if (x <= 0 && y <= 0) { 
+            // Reach end point.
+            Hit(hp);
+            //getPlayScene()->Hit();
+            reachEndTime = 0;
+            return;
         }
-        Rotation = atan2(Velocity.y, Velocity.x);
-        Sprite::Update(deltaTime);
+        Engine::Point target = path.back() * PlayScene::BlockSize + Engine::Point(PlayScene::BlockSize / 2, PlayScene::BlockSize / 2);
+        Engine::Point vec = target - Position;
+        // Add up the distances:
+        // 1. to path.back()
+        // 2. path.back() to border
+        // 3. All intermediate block size
+        // 4. to end point
+        reachEndTime = (vec.Magnitude() + (path.size() - 1) * PlayScene::BlockSize - remainSpeed) / speed;
+        Engine::Point normalized = vec.Normalize();
+        if (remainSpeed - vec.Magnitude() > 0) {
+            Position = target;
+            path.pop_back();
+            remainSpeed -= vec.Magnitude();
+        } else {
+            Velocity = normalized * remainSpeed / deltaTime;
+            remainSpeed = 0;
+        }
+    }
+    Rotation = atan2(Velocity.y, Velocity.x);
+    Sprite::Update(deltaTime);
 }
 void Fighter::ApproachTarget(float deltaTime) {
-    auto e = TargetEnemy;
+    /*auto e = TargetEnemy;
     Engine::Point diff = e->Position - Position;
     float dist = diff.Magnitude();
     Engine::Point dir = diff / dist;  // Normalize
@@ -159,7 +181,8 @@ void Fighter::ApproachTarget(float deltaTime) {
     if (dist > damageRange) {
         Position = Position + dir * speed * deltaTime;
         Rotation = atan2(dir.y, dir.x);
-    }
+    }*/
+    //很抽象的東西
 }
 void Fighter::AttackEnemy(Enemy *enemy) {
     if (enemy) {
@@ -171,6 +194,6 @@ void Fighter::Draw() const {
     Sprite::Draw();
     if (PlayScene::DebugMode) {
         // Draw collision radius.
-        al_draw_circle(Position.x, Position.y, CollisionRadius, al_map_rgb(255, 0, 0), 2);
+        al_draw_circle(Position.x, Position.y, attackRange, al_map_rgb(255, 0, 0), 2);
     }
 }

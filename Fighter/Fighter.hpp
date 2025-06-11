@@ -21,6 +21,7 @@ protected:
     float attackSpeed;
     float damageRange;
     float reload = 0;
+    Engine::Point lastGrid;
     PlayScene *getPlayScene();
     //virtual void OnExplode();
    
@@ -30,6 +31,7 @@ public:
     float reachEndTime;
     std::list<Fighter *>::iterator lockedFighterIterator;
     std::list<Enemy *> lockedEnemy;
+    std::vector<std::vector<int>> FindPath;
     //std::list<Fighter *> lockedFighter;
     Fighter(std::string img, float x, float y, float radius, float speed, float hp, float attackRange, float damageRange,float attackSpeed);
     void Hit(float damage);
