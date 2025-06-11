@@ -89,7 +89,7 @@ void Fighter::Update(float deltaTime) {
             if (path.empty()) {
                 // Reach end point.
                 Hit(hp);
-                getPlayScene()->Hit();
+                //getPlayScene()->Hit();
                 reachEndTime = 0;
                 return;
             }
@@ -112,7 +112,46 @@ void Fighter::Update(float deltaTime) {
             }
         }
         Rotation = atan2(Velocity.y, Velocity.x);
+
+        PlayScene* scene = getPlayScene();
+        if (TargetEnemy) {
+            Engine::Point diff = TargetEnemy->Position - Position;
+            if (diff.Magnitude() > attackRange) {
+                if (lockedFighterIterator != std::list<Fighter*>::iterator())
+                    TargetEnemy->lockedFighters.erase(lockedFighterIterator);
+                TargetEnemy = nullptr;
+                lockedFighterIterator = std::list<Fighter*>::iterator();
+            }
+        }
+        // 2. 如果沒有目標，尋找最近的敵人
+        if (!TargetEnemy) {
+            for (auto& obj : scene->EnemyGroup->GetObjects()) {
+                auto enemy = dynamic_cast<Enemy*>(obj);
+                if (!enemy) continue;
+                Engine::Point diff = enemy->Position - Position;
+                if (diff.Magnitude() <= attackRange) {
+                    TargetEnemy = enemy;
+                    TargetEnemy->lockedFighters.push_back(this);
+                    lockedFighterIterator = std::prev(TargetEnemy->lockedFighters.end());
+                    break;
+                }
+            }
+        }
+        if (TargetEnemy) {
+            reload -= deltaTime;
+            if (reload <= 0) {
+                reload = attackSpeed;
+                AttackEnemy(TargetEnemy);
+            }
+        }
         Sprite::Update(deltaTime);
+}
+void Fighter::AttackEnemy(Enemy *enemy) {
+    if (enemy) {
+        // Create a bullet to attack the enemy.
+        enemy->Hit(100); // Assuming each fighter does 10 damage.
+        AudioHelper::PlayAudio("laser.wav");
+    }
 }
 void Fighter::Draw() const {
     Sprite::Draw();

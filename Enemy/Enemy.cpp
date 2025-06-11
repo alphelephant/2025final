@@ -45,6 +45,13 @@ void Enemy::Hit(float damage) {
     if (hp <= 0) {
         OnExplode();
         // Remove all turret's reference to target.
+        // 1) 先解除所有 fighter 的鎖定
+        for (auto &it : lockedFighters) {
+            it->TargetEnemy = nullptr;
+            // 若你想也把迭代器清掉，可以再加：
+            // f->lockedFighterIterator = std::list<Fighter*>::iterator();
+        }
+        //lockedFighters.clear();
         for (auto &it : lockedTurrets)
             it->Target = nullptr;
         for (auto &it : lockedBullets)
