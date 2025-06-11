@@ -15,6 +15,7 @@
 // TODO HACKATHON-3 (1/3): You can imitate the 2 files: 'SoldierEnemy.hpp', 'SoldierEnemy.cpp' to create a new enemy.
 FarEnemy::FarEnemy(int x, int y) 
     : Enemy("play/enemy-10.png", x, y, 10, 100, 35, 25) {
+    Anchor.y += 8.0f / GetBitmapHeight();
 } //float radius, float speed, float hp, int money
 void FarEnemy::Update(float deltaTime) {
     Enemy::Update(deltaTime); // 保留原本移動等邏輯
@@ -65,14 +66,15 @@ void FarEnemy::Update(float deltaTime) {
                 rotation = ((abs(radian) - maxRotateRadian) * originRotation + maxRotateRadian * targetRotation) / radian;
             // Add 90 degrees (PI/2 radian), since we assume the image is oriented upward.
             Rotation = atan2(rotation.y, rotation.x) + ALLEGRO_PI / 2;
-        //}
+            //}    
+        bulletCoolDown -= deltaTime;
+        if (bulletCoolDown <= 0) {
+            CreateBullet();
+            bulletCoolDown = 1.5f; // 1.5秒發射一次，可依需求調整
+        }
     }
     // 更新子彈冷卻計時器
-    bulletCoolDown -= deltaTime;
-    if (bulletCoolDown <= 0) {
-        CreateBullet();
-        bulletCoolDown = 1.5f; // 1.5秒發射一次，可依需求調整
-    }
+
 }
 void FarEnemy::CreateBullet() {
     /*if (!TargetTurret) {
