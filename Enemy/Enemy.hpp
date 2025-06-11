@@ -21,6 +21,7 @@ protected:
     PlayScene *getPlayScene();
     virtual void OnExplode();
     virtual void CreateBullet();
+    //std::list<Enemy *>::iterator lockedEnemyIterator;
 
 public:
     float reachEndTime;
@@ -30,7 +31,7 @@ public:
     Enemy(std::string img, float x, float y, float radius, float speed, float hp, int money);
     void Hit(float damage);
     void UpdatePath(const std::vector<std::vector<int>> &mapDistance);
-    void Update(float deltaTime) override;
+    virtual void Update(float deltaTime) override;
     void Draw() const override;
 };
 #endif   // ENEMY_HPP

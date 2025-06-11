@@ -25,11 +25,11 @@ void EnemyBullet::Update(float deltaTime) {
     PlayScene *scene = getPlayScene();
     // Can be improved by Spatial Hash, Quad Tree, ...
     // However simply loop through all enemies is enough for this program.
-    for (auto &it : scene->EnemyGroup->GetObjects()) {
+    for (auto &it : scene->TowerGroup->GetObjects()) {
         Turret *turret = dynamic_cast<Turret *>(it);
-        if (!turret->Visible)
+        if (!turret || !turret->Visible)
             continue;
-        if (Engine::Collider::IsCircleOverlap(Position, CollisionRadius, turret->Position, turret->CollisionRadius)) {
+        if (Engine::Collider::IsCircleOverlap(Position, CollisionRadius, turret->Position, turret->Bodyrange)) {
             OnExplode(turret);
             turret->Hit(damage);
             getPlayScene()->BulletGroup->RemoveObject(objectIterator);

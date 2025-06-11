@@ -11,8 +11,8 @@
 fighterEnemy::fighterEnemy(float x, float y)
   : Enemy("play/enemy-9.png", x, y,
           /*radius=*/20, /*speed=*/200,
-          /*hp=*/100, /*money=*/1),
-    triggerRadius(200), explosionRadius(250)
+          /*hp=*/100, /*money=*/10),
+    triggerRadius(180), explosionRadius(220)
 {}
 void fighterEnemy::OnExplode(){
     getPlayScene()->EffectGroup->AddNewObject(new ExplosionEffect(Position.x, Position.y));
@@ -40,7 +40,7 @@ void fighterEnemy::Destruct() {
         float dist = (turret->Position - Position).Magnitude();
         if (dist <= explosionRadius) {
             
-            turret->Hit(10); // 例如造成50點傷害，你可依需求調整
+            turret->Hit(5);
         }
     }
     

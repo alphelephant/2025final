@@ -61,6 +61,8 @@ public:
     Group *EffectGroup;
     Group *UIGroup;
     Group *FighterGroup;
+    Group *EnemyBulletGroup;
+    
     Engine::Label *UIMoney;
     Engine::Label *UILives;
     Engine::Image *imgTarget;

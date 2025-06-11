@@ -70,6 +70,7 @@ void PlayScene::Initialize() {
     AddNewObject(BulletGroup = new Group());
     AddNewObject(EffectGroup = new Group());
     AddNewObject(FighterGroup = new Group());
+    AddNewObject(EnemyBulletGroup = new Group());
     // Should support buttons.
     AddNewControlObject(UIGroup = new Group());
     ReadMap();
@@ -390,6 +391,8 @@ void PlayScene::OnKeyDown(int keyCode) {
     }else if (keyCode == ALLEGRO_KEY_E) {
         // Hotkey for LaserSource.
         UIBtnClicked(2);
+    }else if (keyCode == ALLEGRO_KEY_R) {
+        UIBtnClicked(4);
     }
     else if (keyCode >= ALLEGRO_KEY_0 && keyCode <= ALLEGRO_KEY_9) {
         // Hotkey for Speed up.

@@ -38,7 +38,7 @@ void Enemy::CreateBullet() {
     // Override this method in derived classes to create specific enemy bullets.
 }
 Enemy::Enemy(std::string img, float x, float y, float radius, float speed, float hp, int money) : Engine::Sprite(img, x, y), speed(speed), hp(hp), money(money) {
-    CollisionRadius = radius;
+    CollisionRadius = radius; // Set the collision radius.
     reachEndTime = 0;
 }
 void Enemy::Hit(float damage) {

@@ -4,6 +4,7 @@
 #include <utility>
 
 #include "Enemy/Enemy.hpp"
+#include "Enemy/FarEnemy.hpp"
 #include "Engine/GameEngine.hpp"
 #include "Engine/Group.hpp"
 #include "Engine/IObject.hpp"
@@ -15,21 +16,28 @@
 PlayScene *Turret::getPlayScene() {
     return dynamic_cast<PlayScene *>(Engine::GameEngine::GetInstance().GetActiveScene());
 }
-Turret::Turret(std::string imgBase, std::string imgTurret, float x, float y, float radius, int price, float coolDown, float hp) : Sprite(imgTurret, x, y), price(price), coolDown(coolDown), imgBase(imgBase, x, y),hp(hp) {
+Turret::Turret(std::string imgBase, std::string imgTurret, float x, float y, float radius, int price, float coolDown, float hp) 
+    : Sprite(imgTurret, x, y), price(price), coolDown(coolDown), imgBase(imgBase, x, y),hp(hp) {
     CollisionRadius = radius;
 }
 void Turret::Hit(float damage) {
     hp -= damage;
     if (hp <= 0) {
+        // 通知所有鎖定自己的 FarEnemy 解除鎖定
+        for (auto enemy : lockedFarEnemys) {
+            enemy->TargetTurret = nullptr;
+            enemy->lockedEnemyIterator = std::list<FarEnemy*>::iterator();
+        }
+        lockedFarEnemys.clear();
+
         // 砲台被摧毀時的處理
         auto scene = getPlayScene();
-       
         // 可加上爆炸特效、音效等
         // AudioHelper::PlayAudio("explosion.wav");
         int tx = static_cast<int>(this->Position.x) / 64;
         int ty = static_cast<int>(this->Position.y) / 64;
         scene->TowerGroup->RemoveObject(GetObjectIterator());
-        scene->mapState[ty][tx] = PlayScene::TileType::TILE_FLOOR;  // 恢復地面狀態
+        scene->mapState[ty][tx] = PlayScene::TileType::TILE_FLOOR;
     }
 }
 void Turret::Update(float deltaTime) {
@@ -85,7 +93,7 @@ void Turret::Update(float deltaTime) {
         if (reload <= 0) {
             // shoot.
             reload = coolDown;
-            BeamCoolDown= (!BeamCoolDown);
+            // BeamCoolDown= (!BeamCoolDown);
             CreateBullet();
         }
     }
