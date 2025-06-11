@@ -92,7 +92,7 @@ public:
     void UIBtnClicked(int id);
     bool CheckSpaceValid(int x, int y);
     std::vector<std::vector<int>> CalculateBFSDistance();
-    std::vector<std::vector<int>> CalculateDistance();
+    std::vector<std::vector<int>> CalculateDistance(int x, int y, int endx, int endy);
     // void ModifyReadMapTiles();
 };
 #endif   // PLAYSCENE_HPP

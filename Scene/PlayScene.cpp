@@ -75,7 +75,7 @@ void PlayScene::Initialize() {
     ReadMap();
     ReadEnemyWave();
     mapDistance = CalculateBFSDistance();
-    FightDistance = CalculateDistance();
+    FightDistance = CalculateDistance(SpawnGridPoint.x + 1, SpawnGridPoint.y, EndGridPoint.x,EndGridPoint.y);
     ConstructUI();
     imgTarget = new Engine::Image("play/target.png", 0, 0);
     imgTarget->Visible = false;
@@ -583,9 +583,10 @@ bool PlayScene::CheckSpaceValid(int x, int y) {
     for (auto &it : EnemyGroup->GetObjects())
         dynamic_cast<Enemy *>(it)->UpdatePath(mapDistance);
 
-    FightDistance = CalculateDistance();
-    for (auto &it : FighterGroup->GetObjects())
+    FightDistance = CalculateDistance(SpawnGridPoint.x + 1, SpawnGridPoint.y, EndGridPoint.x, EndGridPoint.y);
+    for (auto &it : FighterGroup->GetObjects()){
         dynamic_cast<Fighter *>(it)->UpdatePath(FightDistance);
+    }
     return true;
 }
 std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {
@@ -617,7 +618,7 @@ std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {
     }
     return map;
 }
-std::vector<std::vector<int>> PlayScene::CalculateDistance() {
+std::vector<std::vector<int>> PlayScene::CalculateDistance(int x, int y, int endx, int endy) {
     // BFS from SpawnGridPoint (通常是左上角)
     std::vector<std::vector<int>> map(MapHeight, std::vector<int>(MapWidth, -1));
     std::queue<Engine::Point> que;
@@ -625,8 +626,8 @@ std::vector<std::vector<int>> PlayScene::CalculateDistance() {
     if (mapState[0][0] != TILE_DIRT)
         return map;
     // 這裡假設 SpawnGridPoint = (-1, 0)，所以實際地圖起點是 (0, 0)
-    que.push(Engine::Point(0, 0));
-    map[0][0] = 0;
+    que.push(Engine::Point(x, y));
+    map[y][x] = 0;
     while (!que.empty()) {
         Engine::Point p = que.front();
         que.pop();
@@ -637,6 +638,7 @@ std::vector<std::vector<int>> PlayScene::CalculateDistance() {
                 map[ny][nx] == -1 && mapState[ny][nx] == TILE_DIRT) {
                 map[ny][nx] = map[p.y][p.x] + 1;
                 que.push(Engine::Point(nx, ny));
+                if (nx == endx && ny == endy) return map;
             }
         }
     }
