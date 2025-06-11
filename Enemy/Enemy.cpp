@@ -15,6 +15,7 @@
 #include "Scene/PlayScene.hpp"
 #include "Turret/Turret.hpp"
 #include "Fighter/Fighter.hpp"
+#include "Fighter/Fighter.hpp"
 #include "UI/Animation/DirtyEffect.hpp"
 #include "UI/Animation/ExplosionEffect.hpp"
 
@@ -49,9 +50,9 @@ void Enemy::Hit(float damage) {
         for (auto &it : lockedFighters) {
             it->TargetEnemy = nullptr;
             // 若你想也把迭代器清掉，可以再加：
-            // f->lockedFighterIterator = std::list<Fighter*>::iterator();
+            it->lockedFighterIterator = std::list<Fighter*>::iterator();
         }
-        //lockedFighters.clear();
+        lockedFighters.clear();
         for (auto &it : lockedTurrets)
             it->Target = nullptr;
         for (auto &it : lockedBullets)

@@ -22,11 +22,12 @@ protected:
     float reload = 0;
     PlayScene *getPlayScene();
     //virtual void OnExplode();
-    std::list<Fighter *>::iterator lockedFighterIterator;
+   
 
 public:
     Enemy *TargetEnemy = nullptr;
     float reachEndTime;
+    std::list<Fighter *>::iterator lockedFighterIterator;
     std::list<Enemy *> lockedEnemy;
     //std::list<Fighter *> lockedFighter;
     Fighter(std::string img, float x, float y, float radius, float speed, float hp, float attackRange, float attackSpeed);
