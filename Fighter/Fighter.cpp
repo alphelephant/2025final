@@ -32,7 +32,7 @@ PlayScene *Fighter::getPlayScene() {
         getPlayScene()->GroundEffectGroup->AddNewObject(new DirtyEffect("play/dirty-" + std::to_string(distId(rng)) + ".png", dist(rng), Position.x, Position.y));
     }
 }*/
-Fighter::Fighter(std::string img, float x, float y, float radius, float speed, float hp, float attackRange, float attackSpeed) : Engine::Sprite(img, x, y), speed(speed), hp(hp), attackRange(attackRange), attackSpeed(attackSpeed) {
+Fighter::Fighter(std::string img, float x, float y, float radius, float speed, float hp, float attackRange,float damageRange, float attackSpeed) : Engine::Sprite(img, x, y), speed(speed), hp(hp), attackRange(attackRange),damageRange(damageRange) , attackSpeed(attackSpeed) {
     CollisionRadius = radius;
     reload = 0;
     TargetEnemy = nullptr;
@@ -85,7 +85,42 @@ void Fighter::UpdatePath(const std::vector<std::vector<int>> &FigherDistance) {
 }
 void Fighter::Update(float deltaTime) {
     float remainSpeed = speed * deltaTime;
-    while (remainSpeed != 0) {
+    PlayScene* scene = getPlayScene();
+    if (TargetEnemy) {
+        Engine::Point diff = TargetEnemy->Position - Position;
+        if (diff.Magnitude() > attackRange) {
+            if (lockedFighterIterator != std::list<Fighter*>::iterator())
+                TargetEnemy->lockedFighters.erase(lockedFighterIterator);
+            TargetEnemy = nullptr;
+            lockedFighterIterator = std::list<Fighter*>::iterator();
+        }
+    }
+    // 2. 如果沒有目標，尋找最近的敵人
+    if (!TargetEnemy) {
+        for (auto& obj : scene->EnemyGroup->GetObjects()) {
+            auto enemy = dynamic_cast<Enemy*>(obj);
+            if (!enemy) continue;
+            Engine::Point diff = enemy->Position - Position;
+            if (diff.Magnitude() <= attackRange) {
+                TargetEnemy = enemy;
+                TargetEnemy->lockedFighters.push_back(this);
+                lockedFighterIterator = std::prev(TargetEnemy->lockedFighters.end());
+                break;
+            }
+        }
+    }
+    if (TargetEnemy) {
+        ApproachTarget(deltaTime);
+        reload -= deltaTime;
+        if (reload <= 0) {
+            Engine::Point diff = TargetEnemy->Position - Position;
+            if (diff.Magnitude() <= damageRange){
+                reload = attackSpeed;
+                AttackEnemy(TargetEnemy);
+            }
+        }
+    }
+    while (remainSpeed != 0 && !TargetEnemy) {
             if (path.empty()) {
                 // Reach end point.
                 Hit(hp);
@@ -112,44 +147,23 @@ void Fighter::Update(float deltaTime) {
             }
         }
         Rotation = atan2(Velocity.y, Velocity.x);
-
-        PlayScene* scene = getPlayScene();
-        if (TargetEnemy) {
-            Engine::Point diff = TargetEnemy->Position - Position;
-            if (diff.Magnitude() > attackRange) {
-                if (lockedFighterIterator != std::list<Fighter*>::iterator())
-                    TargetEnemy->lockedFighters.erase(lockedFighterIterator);
-                TargetEnemy = nullptr;
-                lockedFighterIterator = std::list<Fighter*>::iterator();
-            }
-        }
-        // 2. 如果沒有目標，尋找最近的敵人
-        if (!TargetEnemy) {
-            for (auto& obj : scene->EnemyGroup->GetObjects()) {
-                auto enemy = dynamic_cast<Enemy*>(obj);
-                if (!enemy) continue;
-                Engine::Point diff = enemy->Position - Position;
-                if (diff.Magnitude() <= attackRange) {
-                    TargetEnemy = enemy;
-                    TargetEnemy->lockedFighters.push_back(this);
-                    lockedFighterIterator = std::prev(TargetEnemy->lockedFighters.end());
-                    break;
-                }
-            }
-        }
-        if (TargetEnemy) {
-            reload -= deltaTime;
-            if (reload <= 0) {
-                reload = attackSpeed;
-                AttackEnemy(TargetEnemy);
-            }
-        }
         Sprite::Update(deltaTime);
+}
+void Fighter::ApproachTarget(float deltaTime) {
+    auto e = TargetEnemy;
+    Engine::Point diff = e->Position - Position;
+    float dist = diff.Magnitude();
+    Engine::Point dir = diff / dist;  // Normalize
+
+    // 如果還沒到攻擊距離，就移動
+    if (dist > damageRange) {
+        Position = Position + dir * speed * deltaTime;
+        Rotation = atan2(dir.y, dir.x);
+    }
 }
 void Fighter::AttackEnemy(Enemy *enemy) {
     if (enemy) {
-        // Create a bullet to attack the enemy.
-        enemy->Hit(100); // Assuming each fighter does 10 damage.
+        enemy->Hit(50); // Assuming each fighter does 10 damage.
         AudioHelper::PlayAudio("laser.wav");
     }
 }
