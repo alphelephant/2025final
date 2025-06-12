@@ -7,6 +7,7 @@
 #include "Bullet/Beam.hpp"
 #include "UI/Animation/DirtyEffect.hpp"
 #include "UI/Animation/ExplosionEffect.hpp"
+#include "Fighter/Fighter.hpp"
 
 SuicideEnemy::SuicideEnemy(float x, float y)
   : Enemy("play/enemy-6.png", x, y,
@@ -65,11 +66,17 @@ void SuicideEnemy::SelfDestruct() {
     // ...existing code...
 
     // 3) 自己也從場上移除
-    for (auto &it : lockedTurrets)
+    /*for (auto &it : lockedTurrets)
         it->Target = nullptr;
     for (auto &it : lockedBullets)
         it->Target = nullptr;
-    scene->EnemyGroup->RemoveObject(objectIterator);
+    for (auto &it : lockedFighters) {
+        it->TargetEnemy = nullptr;
+        // 若你想也把迭代器清掉，可以再加：
+        //it->lockedFighterIterator = std::list<Fighter*>::iterator();
+    }
+    scene->EnemyGroup->RemoveObject(objectIterator);*/
+    Hit(hp);
 }
 
 void SuicideEnemy::Update(float deltaTime) {
