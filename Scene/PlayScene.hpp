@@ -38,6 +38,7 @@ public:
     static const std::vector<Engine::Point> directions;
     static const int MapWidth, MapHeight;
     static const int BlockSize;
+    static const int Sandpos = 1344;
     static const float DangerTime;
     static const Engine::Point SpawnGridPoint;
     static const Engine::Point EndGridPoint;
