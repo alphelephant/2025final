@@ -156,7 +156,7 @@ void Fighter::AttackEnemy(Enemy *enemy) {
     if (enemy) {
         getPlayScene()->EffectGroup->AddNewObject(new ShockwaveEffect(Position.x, Position.y, damageRange));
         enemy->Hit(damage); // Assuming each fighter does 10 damage.
-        AudioHelper::PlayAudio("laser.wav");
+        AudioHelper::PlayAudio("NeverGonnaGiveYouUp.wav");
     }
 }
 void Fighter::Draw() const {
