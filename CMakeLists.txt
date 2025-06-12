@@ -42,6 +42,8 @@ add_executable(2025_I2P2_TowerDefense
     EnemyBullet/EnemyBullet.hpp
     EnemyBullet/EnemyFireBullet.cpp
     EnemyBullet/EnemyFireBullet.hpp
+    EnemyBullet/EnemyMissileBullet.cpp
+    EnemyBullet/EnemyMissileBullet.hpp
 
     Engine/Allegro5Exception.cpp
     Engine/Allegro5Exception.hpp
