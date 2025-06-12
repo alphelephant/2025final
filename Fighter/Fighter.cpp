@@ -159,18 +159,18 @@ void Fighter::Update(float deltaTime) {
         }
         //Engine::Point nowpos(x*PlayScene::BlockSize + PlayScene::BlockSize / 2, y * PlayScene::BlockSize + PlayScene::BlockSize / 2);
         Engine::Point target = path.back() * PlayScene::BlockSize + Engine::Point(PlayScene::BlockSize / 2, PlayScene::BlockSize / 2);
-        Engine::LOG(Engine::INFO) <<path.back().x << " " <<path.back().y<< " " << x << " " << y;
+        //Engine::LOG(Engine::INFO) <<path.back().x << " " <<path.back().y<< " " << x << " " << y;
         Engine::Point vec = target - Position;
             //Engine::LOG(Engine::INFO) << "vec: " << vec.x << " " << vec.y;
         reachEndTime = (vec.Magnitude() + (path.size() - 1) * PlayScene::BlockSize - remainSpeed) / speed;
         Engine::Point normalized = vec.Normalize();
-        Engine::LOG(Engine::INFO) << "normalized: " << normalized.x << " " << normalized.y;
-        /*if(abs(normalized.x)>abs(normalized.y)){
+        //Engine::LOG(Engine::INFO) << "normalized: " << normalized.x << " " << normalized.y;
+        if(abs(normalized.x)>abs(normalized.y)){
             normalized.y = 0;
         }
         else{
             normalized.x = 0;
-        }*/
+        }
         if (remainSpeed >= vec.Magnitude()) {
             Position = target;
             path.pop_back();

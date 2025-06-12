@@ -44,7 +44,7 @@ Enemy::Enemy(std::string img, float x, float y, float radius, float speed, float
 void Enemy::Hit(float damage) {
     hp -= damage;
     if (hp <= 0) {
-        printf("Enemy is hit, remaining hp: %.2f\n", hp);
+        //printf("Enemy is hit, remaining hp: %.2f\n", hp);
         hp = -99999;
         OnExplode();
         // Remove all turret's reference to target.
