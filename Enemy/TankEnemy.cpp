@@ -8,7 +8,8 @@
 TankEnemy::TankEnemy(int x, int y)
     : Enemy("play/enemy-3.png", x, y, 20, 60, 500, 60),
       head("play/enemy-3-head.png", x, y), targetRotation(0) {
-}
+        maxHp = hp; // 設定最大生命值
+    }
 void TankEnemy::Draw() const {
     Enemy::Draw();
     head.Draw();

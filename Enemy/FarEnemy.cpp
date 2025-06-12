@@ -16,6 +16,7 @@
 FarEnemy::FarEnemy(int x, int y) 
     : Enemy("play/enemy-10.png", x, y, 10, 100, 35, 25) {
     Anchor.y += 8.0f / GetBitmapHeight();
+    maxHp = hp; // 設定最大生命值
 } //float radius, float speed, float hp, int money
 void FarEnemy::Update(float deltaTime) {
     Enemy::Update(deltaTime); // 保留原本移動等邏輯

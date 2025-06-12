@@ -108,6 +108,15 @@ void Turret::Draw() const {
         // Draw target radius.
         al_draw_circle(Position.x, Position.y, CollisionRadius, al_map_rgb(0, 0, 255), 2);
     }
+    // 血量條
+    float barWidth = 40;
+    float barHeight = 6;
+    float hpPercent = std::max(hp, 0.0f) / maxHp; // 你需要在 Turret 裡加一個 maxHp 變數
+    float left = Position.x - barWidth / 2;
+    float top = Position.y - 25;
+    al_draw_filled_rectangle(left, top, left + barWidth, top + barHeight, al_map_rgb(100, 100, 100));
+    al_draw_filled_rectangle(left, top, left + barWidth * hpPercent, top + barHeight, al_map_rgb(0, 200, 0));
+    al_draw_rectangle(left, top, left + barWidth, top + barHeight, al_map_rgb(0, 0, 0), 2);
 }
 int Turret::GetPrice() const {
     return price;

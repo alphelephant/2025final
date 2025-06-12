@@ -16,7 +16,7 @@ protected:
     float coolDown;
     float reload = 0;
     float rotateRadian = 2 * ALLEGRO_PI;
-    float hp;
+    float hp, maxHp;
     Sprite imgBase;
     std::list<Turret *>::iterator lockedTurretIterator; // Turret iterator in the lockedTurrets list of the target enemy.
     PlayScene *getPlayScene();

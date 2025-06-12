@@ -16,7 +16,7 @@ class Enemy : public Engine::Sprite {
 protected:
     std::vector<Engine::Point> path;
     float speed;
-    float hp;
+    float hp,maxHp;
     int money;
     float damage;
     float attackRange;

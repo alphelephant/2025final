@@ -13,7 +13,9 @@ fighterEnemy::fighterEnemy(float x, float y)
           /*radius=*/20, /*speed=*/200,
           /*hp=*/100, /*money=*/10),
     triggerRadius(180), explosionRadius(220)
-{}
+{
+    maxHp = hp; // 設定最大生命值
+}
 void fighterEnemy::OnExplode(){
     getPlayScene()->EffectGroup->AddNewObject(new ExplosionEffect(Position.x, Position.y));
     

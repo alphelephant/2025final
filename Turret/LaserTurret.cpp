@@ -13,6 +13,7 @@ const int LaserTurret::Price = 200;
 LaserTurret::LaserTurret(float x, float y) : Turret("play/tower-base.png", "play/turret-2.png", x, y, 400, Price, 0.3, 100) {
     // Move center downward, since we the turret head is slightly biased upward.
     Anchor.y += 8.0f / GetBitmapHeight();
+    maxHp = hp;
 }
 void LaserTurret::CreateBullet() {
     Engine::Point diff = Engine::Point(cos(Rotation - ALLEGRO_PI / 2), sin(Rotation - ALLEGRO_PI / 2));

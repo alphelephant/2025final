@@ -14,7 +14,9 @@ SuicideEnemy::SuicideEnemy(float x, float y)
           /*radius=*/20, /*speed=*/500,
           /*hp=*/20, /*money=*/100),
     triggerRadius(200), explosionRadius(350)
-{}
+{
+    maxHp = hp; // 設定最大生命值
+}
 void SuicideEnemy::OnExplode(){
     getPlayScene()->EffectGroup->AddNewObject(new ExplosionEffect(Position.x, Position.y));
     std::random_device dev;

@@ -141,4 +141,16 @@ void Enemy::Draw() const {
         // Draw collision radius.
         al_draw_circle(Position.x, Position.y, CollisionRadius, al_map_rgb(255, 0, 0), 2);
     }
+    // 血量條
+    float barWidth = 40;
+    float barHeight = 6;
+    float hpPercent = std::max(hp, 0.0f) / maxHp; // 你需要在 Enemy 裡加一個 maxHp 變數
+    float left = Position.x - barWidth / 2;
+    float top = Position.y - 25;
+    // 背景
+    al_draw_filled_rectangle(left, top, left + barWidth, top + barHeight, al_map_rgb(100, 100, 100));
+    // 血量
+    al_draw_filled_rectangle(left, top, left + barWidth * hpPercent, top + barHeight, al_map_rgb(255, 0, 0));
+    // 邊框
+    al_draw_rectangle(left, top, left + barWidth, top + barHeight, al_map_rgb(0, 0, 0), 2);
 }
