@@ -13,6 +13,10 @@
 // TODO HACKATHON-3 (1/3): You can imitate the 2 files: 'SoldierEnemy.hpp', 'SoldierEnemy.cpp' to create a new enemy.
 FarEnemy::FarEnemy(int x, int y) 
     : Enemy("play/enemy-10.png", x, y, 10, 20, 200, 25) {
+    // 設定 bulletCoolDown 為 5~20 秒的隨機值
+    static std::mt19937 rng(static_cast<unsigned>(time(nullptr)));
+    std::uniform_real_distribution<float> dist(0.0f, 20.0f);
+    bulletCoolDown = dist(rng);
         Anchor.y += 8.0f / GetBitmapHeight();
         maxHp = hp; // 設定最大生命值
 } //float radius, float speed, float hp, int money
@@ -71,7 +75,7 @@ void FarEnemy::Update(float deltaTime) {
         bulletCoolDown -= deltaTime;
         if (bulletCoolDown <= 0) {
             CreateBullet();
-            bulletCoolDown = 10.0f; // 10.0秒發射一次，可依需求調整
+            bulletCoolDown = 12.0f; // 12.0秒發射一次，可依需求調整
         }
     }
 }

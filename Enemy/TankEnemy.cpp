@@ -38,7 +38,7 @@ void TankEnemy::Update(float deltaTime) {
     bulletCoolDown -= deltaTime;
     if (bulletCoolDown <= 0) {
         CreateBullet();
-        bulletCoolDown = 1.0f; // 1.0秒發射一次，可依需求調整
+        bulletCoolDown = 1.5f; // 1.5秒發射一次，可依需求調整
     }
 }
 void TankEnemy::CreateBullet() {

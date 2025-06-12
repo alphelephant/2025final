@@ -7,7 +7,7 @@ private:
     float triggerRadius;
     float explosionRadius;
     void SelfDestruct();
-    void OnExplode()override;
+    void OnExplode() override;
     bool isExploded = false;
 public:
     SuicideEnemy(float x, float y);

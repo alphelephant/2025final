@@ -1,10 +1,11 @@
 #ifndef FARENEMY_HPP
 #define FARENEMY_HPP
 #include "Enemy.hpp"
+#include <random>
 
 class FarEnemy : public Enemy {
 public:
-    float bulletCoolDown = 10.0f; // 子彈冷卻計時器
+    float bulletCoolDown; // 子彈冷卻計時器
     float rotateRadian = 4 * ALLEGRO_PI; // 最大旋轉弧度/秒
     float attackRange = 1500.0f;  // 新增射程
     Turret *TargetTurret = nullptr;
