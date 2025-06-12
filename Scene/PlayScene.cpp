@@ -468,10 +468,10 @@ void PlayScene::ReadMap() {
         for (int j = 0; j < MapWidth; j++) {
             const int num = mapData[i * MapWidth + j];
             if (num == 1){
-                ALLEGRO_BITMAP* bmp = Engine::Resources::GetInstance().GetBitmap("play/highground-3.png").get();
+                ALLEGRO_BITMAP* bmp = Engine::Resources::GetInstance().GetBitmap("play/high3.png").get();
                 int imgW = al_get_bitmap_width(bmp);
                 int imgH = al_get_bitmap_height(bmp);
-                TileMapGroup->AddNewObject(new Engine::Image("play/highground-3.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize*imgH/imgW));
+                TileMapGroup->AddNewObject(new Engine::Image("play/high3.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize*imgH/imgW));
                 //TileMapGroup->AddNewObject(new Engine::Image("play/highground-2.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
             }
             
@@ -492,9 +492,10 @@ void PlayScene::ReadEnemyWave() {
 }
 void PlayScene::ConstructUI() {
     // Background
-    UIGroup->AddNewObject(new Engine::Image("play/sand.png", 1344, 0, 320, 832));
-    UIGroup->AddNewObject(new Engine::Image("play/wall-2.png", 1280, 0, 64, 416));
-    UIGroup->AddNewObject(new Engine::Image("play/wall-2.png", 1280, 416, 64, 416));
+    UIGroup->AddNewObject(new Engine::Image("play/sand.png", 1280, 0, 320, 832));
+     UIGroup->AddNewObject(new Engine::Image("play/homebase.png", 1150 - 15, 700 + 15, 150, 150));
+     UIGroup->AddNewObject(new Engine::Image("play/home.png", 1187 - 15, 643 + 15, 76, 152));
+    
     // Text
     UIGroup->AddNewObject(new Engine::Label(std::string("Stage ") + std::to_string(MapId), "pirulen.ttf", 32, Sandpos + 14, 0));
     UIGroup->AddNewObject(UIMoney = new Engine::Label(std::string("$") + std::to_string(money), "pirulen.ttf", 24, Sandpos + 14 , 48));
