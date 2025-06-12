@@ -521,16 +521,27 @@ void PlayScene::ConstructUI() {
     int halfW = w / 2;
     int halfH = h / 2;
     Engine::ImageButton *btnn;
-    btnn = new Engine::ImageButton("stage-select/dirt.png", "stage-select/floor.png", halfW + 550, halfH * 3 / 2 + 100, 200, 75);
+    btnn = new Engine::ImageButton("stage-select/dirt.png", "stage-select/floor.png", halfW + 510, halfH + 100, 270, 75);
     btnn->SetOnClickCallback(std::bind(&PlayScene::BacktoStageSelect,this));
     AddNewControlObject(btnn);
-    AddNewObject(new Engine::Label("Back", "pirulen.ttf", 40, halfW + 650, halfH * 3 / 2 + 140, 0, 0, 0, 255, 0.5, 0.5));
+    AddNewObject(new Engine::Label("Back", "pirulen.ttf", 40, halfW + 650, halfH + 140, 0, 0, 0, 255, 0.5, 0.5));
     
     // Pause / Continue Button
-    btnn = new Engine::ImageButton("stage-select/dirt.png", "stage-select/floor.png", halfW + 550, halfH * 3 / 2 , 200, 75);
-    btnn->SetOnClickCallback([this]() {SpeedMult = 0;});
+    static bool paused = false;
+    auto PauseLabel = new Engine::Label("Pause", "pirulen.ttf", 32, halfW + 650, halfH + 40, 0, 0, 0, 255, 0.5, 0.5);
+    
+    btnn = new Engine::ImageButton("stage-select/dirt.png", "stage-select/floor.png", halfW + 510, halfH , 270, 75);
+    btnn->SetOnClickCallback([this,PauseLabel]() mutable {
+        if (SpeedMult != 0) {
+            SpeedMult = 0;
+            PauseLabel->Text = "Continue";
+        } else {
+            SpeedMult = 1;
+            PauseLabel->Text = "Pause";
+        }
+    });
     AddNewControlObject(btnn);
-    AddNewObject(new Engine::Label("Pause", "pirulen.ttf", 40, halfW + 650, halfH * 3 / 2 + 40, 0, 0, 0, 255, 0.5, 0.5));
+    AddNewObject(PauseLabel);
 
     //int w = Engine::GameEngine::GetInstance().GetScreenSize().x;
     //int h = Engine::GameEngine::GetInstance().GetScreenSize().y;
