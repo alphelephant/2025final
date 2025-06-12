@@ -183,9 +183,6 @@ void PlayScene::Update(float deltaTime) {
             case 1:
                 EnemyGroup->AddNewObject(enemy = new SoldierEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
                 break;
-            // TODO HACKATHON-3 (2/3): Add your new enemy here.
-            // case 2:
-            //     ...
             case 2:
                 EnemyGroup->AddNewObject(enemy = new FlyEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
                 break;
@@ -196,10 +193,13 @@ void PlayScene::Update(float deltaTime) {
                 EnemyGroup->AddNewObject(enemy = new SuicideEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
                 break;
             case 5:
-                EnemyGroup->AddNewObject(enemy = new FighterEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
+                EnemyGroup->AddNewObject(enemy = new BlueEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
                 break;
             case 6:
                 EnemyGroup->AddNewObject(enemy = new FarEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
+                break;
+            case 7:
+                EnemyGroup->AddNewObject(enemy = new FighterEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
                 break;
             default:
                 continue;
