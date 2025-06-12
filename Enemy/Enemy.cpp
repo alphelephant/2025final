@@ -71,6 +71,7 @@ void Enemy::UpdatePath(const std::vector<std::vector<int>> &mapDistance) {
     if (y >= PlayScene::MapHeight) y = PlayScene::MapHeight - 1;
     Engine::Point pos(x, y);
     int num = mapDistance[y][x];
+    //Engine::LOG(Engine::INFO) << num << " " << pos.x << " " << pos.y;
     if (num == -1) {
         num = 0;
         Engine::LOG(Engine::ERROR) << "Enemy path finding error";
@@ -91,12 +92,15 @@ void Enemy::UpdatePath(const std::vector<std::vector<int>> &mapDistance) {
         std::uniform_int_distribution<std::mt19937::result_type> dist(0, nextHops.size() - 1);
         pos = nextHops[dist(rng)];
         path[num] = pos;
+        //Engine::LOG(Engine::INFO) << num << " " << pos.x << " " << pos.y;
         num--;
     }
     path[0] = PlayScene::EndGridPoint;
 }
 void Enemy::Update(float deltaTime) {
     // Pre-calculate the velocity.
+    int x = static_cast<int>(floor(Position.x / PlayScene::BlockSize));
+    int y = static_cast<int>(floor(Position.y / PlayScene::BlockSize));
     float remainSpeed = speed * deltaTime;
     while (remainSpeed != 0) {
         if (path.empty()) {
@@ -108,13 +112,17 @@ void Enemy::Update(float deltaTime) {
         }
         Engine::Point target = path.back() * PlayScene::BlockSize + Engine::Point(PlayScene::BlockSize / 2, PlayScene::BlockSize / 2);
         Engine::Point vec = target - Position;
+        //Engine::LOG(Engine::INFO) <<path.back().x << " " <<path.back().y<< " " << x << " " << y;
+        //Engine::LOG(Engine::INFO) << "vec: " << vec.x << " " << vec.y;
         // Add up the distances:
         // 1. to path.back()
         // 2. path.back() to border
         // 3. All intermediate block size
         // 4. to end point
+       // Engine::LOG(Engine::INFO) << target.x << " " << target.y<< " " << Position.x << " " << Position.y;
         reachEndTime = (vec.Magnitude() + (path.size() - 1) * PlayScene::BlockSize - remainSpeed) / speed;
         Engine::Point normalized = vec.Normalize();
+        //Engine::LOG(Engine::INFO) << "remainSpeed: " <<remainSpeed << " " << vec.Magnitude();
         if (remainSpeed - vec.Magnitude() > 0) {
             Position = target;
             path.pop_back();

@@ -76,7 +76,7 @@ void PlayScene::Initialize() {
     ReadMap();
     ReadEnemyWave();
     mapDistance = CalculateBFSDistance();
-    FightDistance = CalculateDistance(SpawnGridPoint.x + 1, SpawnGridPoint.y, EndGridPoint.x,EndGridPoint.y);
+    FightDistance = CalculateDistance(EndGridPoint.x - 1, EndGridPoint.y - 1, SpawnGridPoint.x + 1, SpawnGridPoint.y);
     ConstructUI();
     imgTarget = new Engine::Image("play/target.png", 0, 0);
     imgTarget->Visible = false;
@@ -542,11 +542,11 @@ void PlayScene::UIBtnClicked(int id) {
         // 產生 TankFighter
         EarnMoney(-0); // 請填入正確價格
         Engine::Point start = Engine::Point(
-            (EndGridPoint.x - 1)* BlockSize + BlockSize / 2,
+            (EndGridPoint.x )* BlockSize + BlockSize / 2,
             (EndGridPoint.y )* BlockSize + BlockSize / 2
         );
         TankFighter* tankFighter = new TankFighter(start.x, start.y);
-        tankFighter->UpdatePath(FightDistance);
+        tankFighter->UpdatePath(FightDistance, 0, 0);
         FighterGroup->AddNewObject(tankFighter);
         return;
     }
@@ -586,9 +586,9 @@ bool PlayScene::CheckSpaceValid(int x, int y) {
     for (auto &it : EnemyGroup->GetObjects())
         dynamic_cast<Enemy *>(it)->UpdatePath(mapDistance);
 
-    FightDistance = CalculateDistance(SpawnGridPoint.x + 1, SpawnGridPoint.y, EndGridPoint.x, EndGridPoint.y);
+    FightDistance = CalculateDistance(EndGridPoint.x - 1, EndGridPoint.y - 1, SpawnGridPoint.x + 1, SpawnGridPoint.y);
     for (auto &it : FighterGroup->GetObjects()){
-        dynamic_cast<Fighter *>(it)->UpdatePath(FightDistance);
+        dynamic_cast<Fighter *>(it)->UpdatePath(FightDistance, 0, 0);
     }
     return true;
 }
@@ -626,11 +626,11 @@ std::vector<std::vector<int>> PlayScene::CalculateDistance(int x, int y, int end
     std::vector<std::vector<int>> map(MapHeight, std::vector<int>(MapWidth, -1));
     std::queue<Engine::Point> que;
     // 檢查起點是否合法
-    if (mapState[0][0] != TILE_DIRT)
+    if (mapState[endy][endx] != TILE_DIRT)
         return map;
     // 這裡假設 SpawnGridPoint = (-1, 0)，所以實際地圖起點是 (0, 0)
-    que.push(Engine::Point(x, y));
-    map[y][x] = 0;
+    que.push(Engine::Point(endx, endy));
+    map[endy][endx] = 0;
     while (!que.empty()) {
         Engine::Point p = que.front();
         que.pop();

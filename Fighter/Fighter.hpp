@@ -21,7 +21,8 @@ protected:
     float attackSpeed;
     float damageRange;
     float reload = 0;
-    Engine::Point lastGrid;
+    Engine::Point lastGrid; // 上一個格子
+    Engine::Point goalGrid;
     PlayScene *getPlayScene();
     //virtual void OnExplode();
    
@@ -35,7 +36,7 @@ public:
     //std::list<Fighter *> lockedFighter;
     Fighter(std::string img, float x, float y, float radius, float speed, float hp, float attackRange, float damageRange,float attackSpeed);
     void Hit(float damage);
-    void UpdatePath(const std::vector<std::vector<int>> &mapDistance);
+    void UpdatePath(const std::vector<std::vector<int>> &mapDistance, int endx, int endy);
     void Update(float deltaTime) override;
     void AttackEnemy(Enemy *enemy);
     void AttackBase();
