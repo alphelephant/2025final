@@ -1,6 +1,6 @@
 #include <cmath>
 #include <random>
-#include "fighterEnemy.hpp"
+#include "BlueEnemy.hpp"
 #include "Scene/PlayScene.hpp"
 #include "Turret/Turret.hpp"
 #include "Engine/AudioHelper.hpp"
@@ -8,7 +8,7 @@
 #include "UI/Animation/DirtyEffect.hpp"
 #include "UI/Animation/ExplosionEffect.hpp"
 
-fighterEnemy::fighterEnemy(float x, float y)
+BlueEnemy::BlueEnemy(float x, float y)
   : Enemy("play/enemy-9.png", x, y,
           /*radius=*/20, /*speed=*/200,
           /*hp=*/100, /*money=*/10),
@@ -16,7 +16,7 @@ fighterEnemy::fighterEnemy(float x, float y)
 {
     maxHp = hp; // 設定最大生命值
 }
-void fighterEnemy::OnExplode(){
+void BlueEnemy::OnExplode(){
     getPlayScene()->EffectGroup->AddNewObject(new ExplosionEffect(Position.x, Position.y));
     
     std::random_device dev;
@@ -28,7 +28,7 @@ void fighterEnemy::OnExplode(){
         getPlayScene()->GroundEffectGroup->AddNewObject(new DirtyEffect("play/dirty-" + std::to_string(distId(rng)) + ".png", dist(rng), Position.x, Position.y));
     }
 }
-void fighterEnemy::Destruct() {
+void BlueEnemy::Destruct() {
     auto scene = getPlayScene();
     //  效果：爆炸動畫與特效
     getPlayScene()->EffectGroup->AddNewObject(new ShockwaveEffect(Position.x, Position.y, explosionRadius));
@@ -48,7 +48,7 @@ void fighterEnemy::Destruct() {
     
 }
 
-void fighterEnemy::Update(float deltaTime) {
+void BlueEnemy::Update(float deltaTime) {
     
     // 1) 
     reload -= deltaTime;

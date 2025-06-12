@@ -1,8 +1,8 @@
-#ifndef FIGHTERENEMY_HPP
-#define FIGHTERENEMY_HPP
+#ifndef BLUEENEMY_HPP
+#define BLUEENEMY_HPP
 #include "Enemy.hpp"
 
-class fighterEnemy : public Enemy {
+class BlueEnemy : public Enemy {
 private:
     float coolDown=0.3f; // 冷卻時間
     float reload=0;
@@ -11,7 +11,7 @@ private:
     void Destruct();
     void OnExplode()override;
 public:
-    fighterEnemy(float x, float y);
+    BlueEnemy(float x, float y);
     void Update(float deltaTime) override;
 };
 #endif
