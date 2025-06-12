@@ -165,12 +165,12 @@ void Fighter::Update(float deltaTime) {
         reachEndTime = (vec.Magnitude() + (path.size() - 1) * PlayScene::BlockSize - remainSpeed) / speed;
         Engine::Point normalized = vec.Normalize();
         //Engine::LOG(Engine::INFO) << "normalized: " << normalized.x << " " << normalized.y;
-        if(abs(normalized.x)>abs(normalized.y)){
+        /*if(abs(normalized.x)>abs(normalized.y)){
             normalized.y = 0;
         }
         else{
             normalized.x = 0;
-        }
+        }*/
         if (remainSpeed >= vec.Magnitude()) {
             Position = target;
             path.pop_back();
