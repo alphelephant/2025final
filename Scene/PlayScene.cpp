@@ -9,8 +9,9 @@
 #include <vector>
 
 #include "Enemy/Enemy.hpp"
+#include "Enemy/BlueEnemy.hpp"
 #include "Enemy/FarEnemy.hpp"
-#include "Enemy/fighterEnemy.hpp"
+#include "Enemy/FighterEnemy.hpp"
 #include "Enemy/SoldierEnemy.hpp"
 #include "Enemy/SuicideEnemy.hpp"
 #include "Enemy/TankEnemy.hpp"
@@ -195,7 +196,7 @@ void PlayScene::Update(float deltaTime) {
                 EnemyGroup->AddNewObject(enemy = new SuicideEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
                 break;
             case 5:
-                EnemyGroup->AddNewObject(enemy = new fighterEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
+                EnemyGroup->AddNewObject(enemy = new FighterEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
                 break;
             case 6:
                 EnemyGroup->AddNewObject(enemy = new FarEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
