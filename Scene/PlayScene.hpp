@@ -31,7 +31,7 @@ protected:
     int money;
     int SpeedMult;
     int score = 0;
-    
+    int maxlives ;
 
 public:
     static bool DebugMode;

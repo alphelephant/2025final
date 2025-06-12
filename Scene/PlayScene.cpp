@@ -1,5 +1,8 @@
 #include <algorithm>
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
+#include <allegro5/color.h>
+#include <random>
 #include <cmath>
 #include <fstream>
 #include <functional>
@@ -45,7 +48,7 @@ const int PlayScene::MapWidth = 20, PlayScene::MapHeight = 13;
 const int PlayScene::BlockSize = 64;
 const float PlayScene::DangerTime = 7.61;
 const Engine::Point PlayScene::SpawnGridPoint = Engine::Point(-1, 0);
-const Engine::Point PlayScene::EndGridPoint = Engine::Point(MapWidth, MapHeight - 1);
+const Engine::Point PlayScene::EndGridPoint = Engine::Point(MapWidth - 1, MapHeight - 1);
 const std::vector<int> PlayScene::code = {
     ALLEGRO_KEY_UP, ALLEGRO_KEY_UP, ALLEGRO_KEY_DOWN, ALLEGRO_KEY_DOWN,
     ALLEGRO_KEY_LEFT, ALLEGRO_KEY_RIGHT, ALLEGRO_KEY_LEFT, ALLEGRO_KEY_RIGHT,
@@ -60,6 +63,7 @@ void PlayScene::Initialize() {
     ticks = 0;
     deathCountDown = -1;
     lives = 10;
+    maxlives = 10;
     money = 150;
     SpeedMult = 1;
     // Add groups from bottom to top.
@@ -222,6 +226,20 @@ void PlayScene::Update(float deltaTime) {
 }
 void PlayScene::Draw() const {
     IScene::Draw();
+    int barX = 1150; // homebase 圖片中心 x
+    int barY = 643 - 20;  // homebase 圖片上方 y
+    int barW = 120;       // 血條寬度
+    int barH = 16;        // 血條高度
+    float hpPercent = std::max(0, lives) / static_cast<float>(maxlives);
+
+    // 外框
+    al_draw_rectangle(barX, barY, barX + barW, barY + barH, al_map_rgb(0, 0, 0), 2);
+    // 血量
+    al_draw_filled_rectangle(barX, barY, barX + barW * hpPercent, barY + barH, al_map_rgb(255, 0, 0));
+    // 文字
+    Engine::Label label(std::to_string(lives) + " / " + std::to_string(maxlives), "pirulen.ttf", 18, barX + barW / 2, barY + barH / 2);
+    label.Anchor = Engine::Point(0.5, 0.5);
+    label.Draw();
     if (DebugMode) {
         // Draw reverse BFS distance on all reachable blocks.
         for (int i = 0; i < MapHeight; i++) {
@@ -453,8 +471,15 @@ void PlayScene::ReadMap() {
             }
             if (num==2)
                 TileMapGroup->AddNewObject(new Engine::Image("play/highground-1.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
-            else if (num == 0)
-                TileMapGroup->AddNewObject(new Engine::Image("play/block-2.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+            else if (num == 0){
+                static std::random_device rd;
+                static std::mt19937 gen(rd());
+                std::uniform_int_distribution<> dis(1, 4);
+                int dirtIdx = dis(gen);
+                std::string dirtImg = "play/dirt-" + std::to_string(dirtIdx) + ".png";
+                TileMapGroup->AddNewObject(new Engine::Image(dirtImg, j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+            }
+               
             else if (num == 1){
                 /*ALLEGRO_BITMAP* bmp = Engine::Resources::GetInstance().GetBitmap("play/highground-3.png").get();
                 int imgW = al_get_bitmap_width(bmp);
