@@ -113,7 +113,7 @@ void Turret::Draw() const {
     float barHeight = 6;
     float hpPercent = std::max(hp, 0.0f) / maxHp; // 你需要在 Turret 裡加一個 maxHp 變數
     float left = Position.x - barWidth / 2;
-    float top = Position.y - 25;
+    float top = Position.y + 30;
     al_draw_filled_rectangle(left, top, left + barWidth, top + barHeight, al_map_rgb(100, 100, 100));
     al_draw_filled_rectangle(left, top, left + barWidth * hpPercent, top + barHeight, al_map_rgb(0, 200, 0));
     al_draw_rectangle(left, top, left + barWidth, top + barHeight, al_map_rgb(0, 0, 0), 2);
