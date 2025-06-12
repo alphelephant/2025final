@@ -32,7 +32,8 @@ PlayScene *Fighter::getPlayScene() {
         getPlayScene()->GroundEffectGroup->AddNewObject(new DirtyEffect("play/dirty-" + std::to_string(distId(rng)) + ".png", dist(rng), Position.x, Position.y));
     }
 }*/
-Fighter::Fighter(std::string img, float x, float y, float radius, float speed, float hp, float attackRange,float damageRange, float attackSpeed) : Engine::Sprite(img, x, y), speed(speed), hp(hp), attackRange(attackRange),damageRange(damageRange) , attackSpeed(attackSpeed) {
+Fighter::Fighter(std::string img, float x, float y, float radius, float speed, float hp, float attackRange,float damageRange, float attackSpeed) 
+    : Engine::Sprite(img, x, y), speed(speed), hp(hp), attackRange(attackRange),damageRange(damageRange) , attackSpeed(attackSpeed) {
     CollisionRadius = radius;
     reload = 0;
     TargetEnemy = nullptr;
@@ -105,7 +106,7 @@ void Fighter::Update(float deltaTime) {
         UpdatePath(FindPath);
         Engine::Point diff = TargetEnemy->Position - Position;
         if (diff.Magnitude() > attackRange) {
-            if (lockedFighterIterator != std::list<Fighter*>::iterator())
+            if (TargetEnemy && lockedFighterIterator != std::list<Fighter*>::iterator())
                 TargetEnemy->lockedFighters.erase(lockedFighterIterator);
             TargetEnemy = nullptr;
             lockedFighterIterator = std::list<Fighter*>::iterator();
@@ -187,7 +188,7 @@ void Fighter::ApproachTarget(float deltaTime) {
 void Fighter::AttackEnemy(Enemy *enemy) {
     if (enemy) {
         enemy->Hit(50); // Assuming each fighter does 10 damage.
-        AudioHelper::PlayAudio("laser.wav");
+        AudioHelper::PlayAudio("NeverGonnaGiveYouUp.wav");
     }
 }
 void Fighter::Draw() const {
