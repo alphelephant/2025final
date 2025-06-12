@@ -507,8 +507,8 @@ void PlayScene::ConstructUI() {
     
     //Button 5
     TurretButton* TankfighterBtn = new TurretButton("play/floor.png", "play/dirt.png",
-        Engine::Sprite("play/tower-base.png", 1294, 136+ 64, 0, 0, 0, 0),
-        Engine::Sprite("play/enemy-4.png", 1294, 136+ 64 - 8, 0, 0, 0, 0), 1294, 136+ 64, /*FighterPrice*/0);
+        Engine::Sprite("play/tower-base.png", 1294, 136+ 64+ 16, 0, 0, 0, 0),
+        Engine::Sprite("play/enemy-4.png", 1294 + 7, 136+ 64 + 16 + 7, 0, 0, 0, 0), 1294, 136+ 64 + 16, TankFighter::Price);
     TankfighterBtn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 4));
     UIGroup->AddNewControlObject(TankfighterBtn);
     
@@ -538,9 +538,9 @@ void PlayScene::UIBtnClicked(int id) {
     else if(id == 3 && money >= 10){
         SetShovelMode(true);
     }
-    else if (id == 4 && money >= /*TankFighterPrice*/0) {
+    else if (id == 4 && money >= TankFighter::Price) {
         // 產生 TankFighter
-        EarnMoney(-0); // 請填入正確價格
+        EarnMoney(-TankFighter::Price);
         Engine::Point start = Engine::Point(
             (EndGridPoint.x )* BlockSize + BlockSize / 2,
             (EndGridPoint.y )* BlockSize + BlockSize / 2

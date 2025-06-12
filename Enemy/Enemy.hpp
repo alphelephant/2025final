@@ -18,6 +18,9 @@ protected:
     float speed;
     float hp;
     int money;
+    float damage;
+    float attackRange;
+    float attackSpeed;
     PlayScene *getPlayScene();
     virtual void OnExplode();
     virtual void CreateBullet();
