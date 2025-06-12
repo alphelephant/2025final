@@ -64,12 +64,13 @@ void SuicideEnemy::SelfDestruct() {
     }
     // ...existing code...
 
-    // 3) 自己也從場上移除
+    /*// 3) 自己也從場上移除
     for (auto &it : lockedTurrets)
         it->Target = nullptr;
     for (auto &it : lockedBullets)
         it->Target = nullptr;
-    scene->EnemyGroup->RemoveObject(objectIterator);
+    scene->EnemyGroup->RemoveObject(objectIterator);*/
+    Hit(hp+1);
 }
 
 void SuicideEnemy::Update(float deltaTime) {
