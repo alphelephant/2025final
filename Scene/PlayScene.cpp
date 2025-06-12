@@ -444,19 +444,38 @@ void PlayScene::ReadMap() {
             //mapState[i][j] = num ? TILE_FLOOR : TILE_DIRT;
             if(num == 0){
                 mapState[i][j] = TILE_DIRT;
-            }else if(num == 1 ){
+            }else if(num == 2 ){
                 mapState[i][j] = TILE_OCCUPIED;
             }
-            else if(num == 2){
+            else if(num == 1){
                 mapState[i][j] = TILE_FLOOR;
             }
-            if (num==1)
+            if (num==2)
                 TileMapGroup->AddNewObject(new Engine::Image("play/highground-1.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
             else if (num == 0)
                 TileMapGroup->AddNewObject(new Engine::Image("play/block-2.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
-            else if (num == 2)
-                TileMapGroup->AddNewObject(new Engine::Image("play/highground-2.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+            else if (num == 1){
+                /*ALLEGRO_BITMAP* bmp = Engine::Resources::GetInstance().GetBitmap("play/highground-3.png").get();
+                int imgW = al_get_bitmap_width(bmp);
+                int imgH = al_get_bitmap_height(bmp);
+                TileMapGroup->AddNewObject(new Engine::Image("play/highground-3.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize*imgH/imgW));*/
+                //TileMapGroup->AddNewObject(new Engine::Image("play/highground-2.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
             }
+            
+        }
+    }
+    for (int i = 0; i < MapHeight; i++) {
+        for (int j = 0; j < MapWidth; j++) {
+            const int num = mapData[i * MapWidth + j];
+            if (num == 1){
+                ALLEGRO_BITMAP* bmp = Engine::Resources::GetInstance().GetBitmap("play/highground-3.png").get();
+                int imgW = al_get_bitmap_width(bmp);
+                int imgH = al_get_bitmap_height(bmp);
+                TileMapGroup->AddNewObject(new Engine::Image("play/highground-3.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize*imgH/imgW));
+                //TileMapGroup->AddNewObject(new Engine::Image("play/highground-2.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+            }
+            
+        }
     }
 }
 void PlayScene::ReadEnemyWave() {
