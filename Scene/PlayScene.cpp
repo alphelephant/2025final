@@ -512,14 +512,33 @@ void PlayScene::ConstructUI() {
     TankfighterBtn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 4));
     UIGroup->AddNewControlObject(TankfighterBtn);
     
+    //Back Button
     int w = Engine::GameEngine::GetInstance().GetScreenSize().x;
     int h = Engine::GameEngine::GetInstance().GetScreenSize().y;
+    int halfW = w / 2;
+    int halfH = h / 2;
+    Engine::ImageButton *btnn;
+    btnn = new Engine::ImageButton("stage-select/dirt.png", "stage-select/floor.png", halfW + 550, halfH * 3 / 2 + 100, 200, 75);
+    btnn->SetOnClickCallback(std::bind(&PlayScene::BacktoStageSelect,this));
+    AddNewControlObject(btnn);
+    AddNewObject(new Engine::Label("Back", "pirulen.ttf", 40, halfW + 650, halfH * 3 / 2 + 140, 0, 0, 0, 255, 0.5, 0.5));
+    
+    // Pause / Continue Button
+    btnn = new Engine::ImageButton("stage-select/dirt.png", "stage-select/floor.png", halfW + 550, halfH * 3 / 2 , 200, 75);
+    btnn->SetOnClickCallback([this]() {SpeedMult = 0;});
+    AddNewControlObject(btnn);
+    AddNewObject(new Engine::Label("Pause", "pirulen.ttf", 40, halfW + 650, halfH * 3 / 2 + 40, 0, 0, 0, 255, 0.5, 0.5));
+
+    //int w = Engine::GameEngine::GetInstance().GetScreenSize().x;
+    //int h = Engine::GameEngine::GetInstance().GetScreenSize().y;
     int shift = 135 + 25;
     dangerIndicator = new Engine::Sprite("play/benjamin.png", w - shift, h - shift);
     dangerIndicator->Tint.a = 0;
     UIGroup->AddNewObject(dangerIndicator);
 }
-
+void PlayScene::BacktoStageSelect() {
+    Engine::GameEngine::GetInstance().ChangeScene("stage-select");
+}
 void PlayScene::UIBtnClicked(int id) {
     if (preview)
         UIGroup->RemoveObject(preview->GetObjectIterator());

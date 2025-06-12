@@ -96,5 +96,6 @@ public:
     std::vector<std::vector<int>> CalculateBFSDistance();
     std::vector<std::vector<int>> CalculateDistance(int x, int y, int endx, int endy);
     // void ModifyReadMapTiles();
+    void BacktoStageSelect();
 };
 #endif   // PLAYSCENE_HPP
