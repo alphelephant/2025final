@@ -2,7 +2,9 @@
 #include "UI/Component/ImageButton.hpp"
 #include "UI/Component/Label.hpp"
 #include "Engine/GameEngine.hpp"
+#include "Enemy/Enemy.hpp"
 #include <functional>
+#include "Enemy/Enemy.hpp"
 
 void InfoScene::Initialize() {
     // 填入敵人資料
@@ -41,6 +43,12 @@ void InfoScene::Initialize() {
     // 中間介紹文字
     descLabel = new Engine::Label("Click The Image", "pirulen.ttf", 36, w/2, infoBoxY + 50, 0, 0, 0, 255, 0.5, 0);
     AddNewObject(descLabel);
+    hpLabel = new Engine::Label("", "pirulen.ttf", 36, w/2, infoBoxY + 100, 0, 0, 0, 255, 0.5, 0);
+    AddNewObject(hpLabel);
+    damageLabel = new Engine::Label("", "pirulen.ttf", 36, w/2, infoBoxY + 150, 0, 0, 0, 255, 0.5, 0);
+    speedLabel = new Engine::Label("", "pirulen.ttf", 36, w/2, infoBoxY + 200, 0, 0, 0, 255, 0.5, 0);
+    AddNewObject(damageLabel);
+    AddNewObject(speedLabel);
 
     // 返回按鈕
     auto backBtn = new Engine::ImageButton("stage-select/dirt.png", "stage-select/floor.png", w - 250, h - 120, 200, 80);
@@ -96,6 +104,15 @@ void InfoScene::OnEnemyClick(int idx) {
     if (descLabel && idx < enemyItems.size()) {
         descLabel->Text = enemyItems[idx].name + " " + enemyItems[idx].description;
     }
+    /*if (hpLabel && idx < enemyItems.size()) {
+        hpLabel->Text = "HP: " + std::to_string(enemyItems[idx].hp);
+    }
+    if (damageLabel && idx < enemyItems.size()) {
+        damageLabel->Text = "Damage: " + std::to_string(enemyItems[idx].damage);
+    }
+    if (speedLabel && idx < enemyItems.size()) {
+        speedLabel->Text = "Speed: " + std::to_string(Enemy::GetInfo("speed"));
+    }*/
 }
 
 void InfoScene::OnTurretClick(int idx) {
