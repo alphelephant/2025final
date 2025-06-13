@@ -100,6 +100,7 @@ void Enemy::UpdatePath(const std::vector<std::vector<int>> &mapDistance) {
 void Enemy::Update(float deltaTime) {
     PlayScene* scene = getPlayScene();
     // Pre-calculate the velocity.
+    reload -= deltaTime;
     int x = static_cast<int>(floor(Position.x / PlayScene::BlockSize));
     int y = static_cast<int>(floor(Position.y / PlayScene::BlockSize));
     float remainSpeed = speed * deltaTime;
