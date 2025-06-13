@@ -1,4 +1,4 @@
- #ifndef Scoreboard_HPP
+#ifndef Scoreboard_HPP
 #define Scoreboard_HPP
 #include <memory>
 
@@ -27,4 +27,4 @@ public:
     //void SFXSlideOnValueChanged(float value);
 };
 
-#endif   // SettingsScene_HPP
+#endif   // Scoreboard_HPP

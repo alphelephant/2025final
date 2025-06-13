@@ -78,6 +78,8 @@ add_executable(2025_I2P2_TowerDefense
     Fighter/SwordFighter.hpp
 
     # TODO HACKATHON-2 (3/3): Add the new scene source files here
+    Scene/InfoScene.cpp
+    Scene/InfoScene.hpp
     Scene/LoseScene.cpp
     Scene/LoseScene.hpp
     Scene/PlayScene.cpp
