@@ -185,3 +185,6 @@ void Fighter::Draw() const {
     // 邊框
     al_draw_rectangle(left, top, left + barWidth, top + barHeight, al_map_rgb(0, 0, 0), 2);
 }
+void Fighter::ApproachTarget(float deltaTime) {
+    // 預設什麼都不做
+}
