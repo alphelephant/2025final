@@ -14,6 +14,9 @@
 TankEnemy::TankEnemy(int x, int y)
     : Enemy("play/enemy-3.png", x, y, 20, 60, 500, 60),
     head("play/enemy-3-head.png", x, y), targetRotation(0) {
+        static std::mt19937 rng(static_cast<unsigned>(time(nullptr)));
+        std::uniform_real_distribution<float> dist(0.0f, 12.0f);
+        bulletCoolDown = dist(rng);
         maxHp = hp; // 設定最大生命值
 } //float radius, float speed, float hp, int money
 void TankEnemy::Draw() const {
@@ -38,14 +41,21 @@ void TankEnemy::Update(float deltaTime) {
     bulletCoolDown -= deltaTime;
     if (bulletCoolDown <= 0) {
         CreateBullet();
-        bulletCoolDown = 1.5f; // 1.5秒發射一次，可依需求調整
+        bulletCoolDown = 8.0f; // 8.0秒發射一次，可依需求調整
     }
 }
 void TankEnemy::CreateBullet() {
     // 以目前頭部方向發射
-    Engine::Point forward = Engine::Point(cos(head.Rotation), sin(head.Rotation));
-    Engine::Point spawnPos = Position + forward * 36; // 子彈生成在坦克頭前方
-    float rotation = atan2(forward.y, forward.x);
-    getPlayScene()->EnemyBulletGroup->AddNewObject(new EnemyFireBullet(spawnPos, forward, rotation, this));
+    float basedir = head.Rotation;
+    static std::mt19937 rng(static_cast<unsigned>(time(nullptr)));
+    std::uniform_int_distribution<int> dist(1, 3);
+    int x = dist(rng);
+    for(int i = -1*x + 1; i < x; i++){
+        Engine::Point forward = Engine::Point(cos(basedir + i*ALLEGRO_PI/14), sin(basedir + i*ALLEGRO_PI/14));
+        Engine::Point spawnPos = Position + forward * 36; // 子彈生成在坦克頭前方
+        float rotation = atan2(forward.y, forward.x);
+        getPlayScene()->EnemyBulletGroup->AddNewObject(new EnemyFireBullet(spawnPos, forward, rotation, this));
+    }
+
     AudioHelper::PlayAudio("gun.wav");
 }
