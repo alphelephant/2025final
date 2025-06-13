@@ -50,9 +50,9 @@ const float PlayScene::DangerTime = 7.61;
 const Engine::Point PlayScene::SpawnGridPoint = Engine::Point(0, 1);
 const Engine::Point PlayScene::EndGridPoint = Engine::Point(MapWidth - 1, MapHeight - 1);
 const std::vector<int> PlayScene::code = {
-    ALLEGRO_KEY_UP, ALLEGRO_KEY_UP, ALLEGRO_KEY_DOWN, ALLEGRO_KEY_DOWN,
+    ALLEGRO_KEY_UP, ALLEGRO_KEY_UP /*ALLEGRO_KEY_DOWN, ALLEGRO_KEY_DOWN,
     ALLEGRO_KEY_LEFT, ALLEGRO_KEY_RIGHT, ALLEGRO_KEY_LEFT, ALLEGRO_KEY_RIGHT,
-    ALLEGRO_KEY_B, ALLEGRO_KEY_A, 215, ALLEGRO_KEY_ENTER
+    ALLEGRO_KEY_B, ALLEGRO_KEY_A, 215, ALLEGRO_KEY_ENTER*/
 };
 Engine::Point PlayScene::GetClientSize() {
     return Engine::Point(MapWidth * BlockSize, MapHeight * BlockSize);
@@ -67,7 +67,7 @@ void PlayScene::Initialize() {
     money = 150;
     SpeedMult = 1;
     enemylives = 10;
-    maxenemylives = 10;
+    maxenemylives = 15;
     // Add groups from bottom to top.
     AddNewObject(TileMapGroup = new Group());
     AddNewObject(GroundEffectGroup = new Group());
