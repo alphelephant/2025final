@@ -65,7 +65,7 @@ void PlayScene::Initialize() {
     deathCountDown = -1;
     lives = 10;
     maxlives = 10;
-    money = 150;
+    money = 250;
     SpeedMult = 1;
     enemylives = 10;
     maxenemylives = 10;

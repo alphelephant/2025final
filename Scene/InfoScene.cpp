@@ -58,7 +58,7 @@ void InfoScene::Initialize() {
 void InfoScene::ShowEnemy() {
     // 左側敵人圖片
     int leftX = 100;
-    int baseY = 100;
+    int baseY = 50;
     int spacing = 120;
     int imgW = 100, imgH = 100;
 
