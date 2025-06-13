@@ -16,7 +16,7 @@ FighterEnemy::FighterEnemy(int x, int y)
     isFighterEnemy = true; // 設定為 FighterEnemy
 }
 
-void FighterEnemy::Update(float deltaTime) {
+/*void FighterEnemy::Update(float deltaTime) {
     PlayScene* scene = getPlayScene();
     bool foundFighter = false;
 
@@ -55,4 +55,4 @@ void FighterEnemy::Update(float deltaTime) {
         // 沒有Fighter則照常移動
         Enemy::Update(deltaTime);
     }
-}
+}*/

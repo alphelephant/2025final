@@ -11,6 +11,6 @@ private:
     float reload = 0.0f; // 攻擊冷卻
 public:
     FighterEnemy(int x, int y);
-    void Update(float deltaTime) override;
+    //void Update(float deltaTime) override;
 };
 #endif   // FIGHTERENEMY_HPP

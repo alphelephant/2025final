@@ -25,6 +25,7 @@ protected:
     float detectRange = 0; // 偵測範圍
     float attackRange = 0; // 攻擊範圍
     float coolDown = 0.0f; // 攻擊冷卻時間
+    float reload = 0.0f; // 子彈冷卻計時器
     
     PlayScene *getPlayScene();
     virtual void OnExplode();
