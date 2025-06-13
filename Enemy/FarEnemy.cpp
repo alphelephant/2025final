@@ -18,13 +18,11 @@ FarEnemy::FarEnemy(int x, int y)
     std::uniform_real_distribution<float> dist(0.0f, 20.0f);
     bulletCoolDown = dist(rng);
         Anchor.y += 8.0f / GetBitmapHeight();
-        maxHp = hp; // 設定最大生命值
+        maxHp = hp;
 } //float radius, float speed, float hp, int money
 void FarEnemy::Update(float deltaTime) {
     Enemy::Update(deltaTime); // 保留原本移動等邏輯
     PlayScene *scene = getPlayScene();
-    /*imgBase.Position = Position;
-    imgBase.Tint = Tint;*/
     
     // 檢查是否有目標
     if (TargetTurret) {

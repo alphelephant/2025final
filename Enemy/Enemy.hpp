@@ -21,6 +21,7 @@ protected:
     float damage;
     float attackRange;
     float attackSpeed;
+    bool isFighterEnemy = false; // 是否為 FighterEnemy
     PlayScene *getPlayScene();
     virtual void OnExplode();
     virtual void CreateBullet();

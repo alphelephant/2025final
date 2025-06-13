@@ -5,6 +5,7 @@
 // TODO HACKATHON-3 (1/3): You can imitate the 2 files: 'SoldierEnemy.hpp', 'SoldierEnemy.cpp' to create a new enemy.
 SoldierEnemy::SoldierEnemy(int x, int y) : Enemy("play/enemy-1.png", x, y, 10, 100, 5, 25) {
     maxHp = hp;
+    isFighterEnemy = true; // 設定為 FighterEnemy
 } // float radius, float speed, float hp, int money
 FlyEnemy::FlyEnemy(int x, int y) : Enemy("play/enemy-2.png", x, y, 10, 300, 10, 50) {
     maxHp = hp;

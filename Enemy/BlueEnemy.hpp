@@ -10,7 +10,7 @@ private:
     float explosionRadius;
     float damage = 5;
     void Destruct();
-    void OnExplode()override;
+    void OnExplode() override;
 public:
     BlueEnemy(float x, float y);
     void Update(float deltaTime) override;

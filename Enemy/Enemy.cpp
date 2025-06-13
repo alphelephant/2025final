@@ -98,10 +98,27 @@ void Enemy::UpdatePath(const std::vector<std::vector<int>> &mapDistance) {
     path[0] = PlayScene::EndGridPoint;
 }
 void Enemy::Update(float deltaTime) {
+    PlayScene* scene = getPlayScene();
+
+    if(isFighterEnemy){
+        // 檢查範圍內是否有任何Fighter
+        for (auto& obj : scene->FighterGroup->GetObjects()) {
+            auto fighter = dynamic_cast<Fighter*>(obj);
+            if (!fighter) continue;
+            Engine::Point diff = fighter->Position - Position;
+            if (diff.Magnitude() <= attackRange) {
+                // 停止移動
+                Velocity = Engine::Point(0,0);
+                return; // 停止更新位置
+            }
+        }
+    }
+    
     // Pre-calculate the velocity.
     int x = static_cast<int>(floor(Position.x / PlayScene::BlockSize));
     int y = static_cast<int>(floor(Position.y / PlayScene::BlockSize));
     float remainSpeed = speed * deltaTime;
+    // 只要還有移動距離就持續移動
     while (remainSpeed != 0) {
         if (path.empty()) {
             // Reach end point.
@@ -110,19 +127,19 @@ void Enemy::Update(float deltaTime) {
             reachEndTime = 0;
             return;
         }
+        // 取得下一個目標點（格子中心）
         Engine::Point target = path.back() * PlayScene::BlockSize + Engine::Point(PlayScene::BlockSize / 2, PlayScene::BlockSize / 2);
         Engine::Point vec = target - Position;
-        //Engine::LOG(Engine::INFO) <<path.back().x << " " <<path.back().y<< " " << x << " " << y;
-        //Engine::LOG(Engine::INFO) << "vec: " << vec.x << " " << vec.y;
         // Add up the distances:
         // 1. to path.back()
         // 2. path.back() to border
         // 3. All intermediate block size
         // 4. to end point
-       // Engine::LOG(Engine::INFO) << target.x << " " << target.y<< " " << Position.x << " " << Position.y;
+
+        // 計算剩餘到終點的時間
         reachEndTime = (vec.Magnitude() + (path.size() - 1) * PlayScene::BlockSize - remainSpeed) / speed;
         Engine::Point normalized = vec.Normalize();
-        //Engine::LOG(Engine::INFO) << "remainSpeed: " <<remainSpeed << " " << vec.Magnitude();
+        // 如果這一幀可以走到目標點
         if (remainSpeed - vec.Magnitude() > 0) {
             Position = target;
             path.pop_back();
@@ -132,6 +149,7 @@ void Enemy::Update(float deltaTime) {
             remainSpeed = 0;
         }
     }
+    // 設定旋轉角度
     Rotation = atan2(Velocity.y, Velocity.x);
     Sprite::Update(deltaTime);
 }
