@@ -74,8 +74,8 @@ add_executable(2025_I2P2_TowerDefense
     Fighter/Fighter.hpp
     Fighter/TankFighter.cpp
     Fighter/TankFighter.hpp
-    Fighter/SwordFighter.cpp
-    Fighter/SwordFighter.hpp
+    Fighter/Swordfighter.cpp
+    Fighter/Swordfighter.hpp
 
     # TODO HACKATHON-2 (3/3): Add the new scene source files here
     Scene/InfoScene.cpp

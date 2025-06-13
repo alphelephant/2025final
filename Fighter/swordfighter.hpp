@@ -3,12 +3,22 @@
 #include "Fighter.hpp"
 
 class SwordFighter : public Fighter {
+private:
+    std::shared_ptr<ALLEGRO_BITMAP> runBmp;
+    std::shared_ptr<ALLEGRO_BITMAP> attackBmp;
+    // 每個動畫的 frame 數量
+    int runFrameCount;
+    int attackFrameCount;
+    // 目前計時器
+    float animTimer = 0;
+    // 每幀持續時間（秒）
+    float frameDuration = 0.1f;
+    // 當前播放的 state
+    bool isAttacking = false;
 public:
     SwordFighter(float x, float y);
-   /* void Draw() const override {
-        // Draw the sword fighter with a specific image.
-        Engine::Sprite::Draw();
-    }*/
+    void Update(float deltaTime) override;
+    void Draw() const override;
     static const int Price = 250;
 };
 

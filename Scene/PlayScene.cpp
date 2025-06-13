@@ -35,7 +35,7 @@
 #include "Bullet/Beam.hpp"
 #include "Fighter/Fighter.hpp"
 #include "Fighter/TankFighter.hpp"
-#include "Fighter/SwordFighter.hpp"
+#include "Fighter/Swordfighter.hpp"
 
 // TODO HACKATHON-4 (1/3): Trace how the game handles keyboard input.
 // TODO HACKATHON-4 (2/3): Find the cheat code sequence in this file.
@@ -620,8 +620,8 @@ void PlayScene::ConstructUI() {
     UIGroup->AddNewControlObject(TankfighterBtn);
     //Button 6
     TurretButton* SwordFighterBtn = new TurretButton("play/floor.png", "play/dirt.png",
-        Engine::Sprite("play/tower-base.png", Sandpos + 14 + 64 + 8, 136 + 64 + 16 , 0, 0, 0, 0),
-        Engine::Sprite("play/enemy-5.png", Sandpos + 14 + 7 + 64 + 8, 136 + 64 + 16 + 7, 0, 0, 0, 0), Sandpos + 14 + 64 + 8, 136  + 16 + 64, SwordFighter::Price);
+        Engine::Sprite("play/floor.png", Sandpos + 14 + 64 + 8, 136 + 64 + 16 , 0, 0, 0, 0),
+        Engine::Sprite("play/Swordman.png", Sandpos + 14 + 7 + 64 + 8, 136 + 64 + 16 + 7, 0, 0, 0, 0), Sandpos + 14 + 64 + 8, 136  + 16 + 64, SwordFighter::Price);
     SwordFighterBtn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 5));
     UIGroup->AddNewControlObject(SwordFighterBtn);
     //Back Button

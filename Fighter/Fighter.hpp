@@ -22,6 +22,7 @@ protected:
     float attackSpeed;
     float damageRange;
     float reload = 0;
+    bool isSwordFighter = false; // 是否為劍士
     Engine::Point lastGrid; // 上一個格子
     Engine::Point goalGrid;
     PlayScene *getPlayScene();

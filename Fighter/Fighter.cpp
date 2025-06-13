@@ -92,7 +92,7 @@ void Fighter::Update(float deltaTime) {
     while (remainSpeed != 0 && !path.empty()) {
         int x = static_cast<int>(floor(Position.x / PlayScene::BlockSize));
         int y = static_cast<int>(floor(Position.y / PlayScene::BlockSize));
-        if (x <= 0 && y <= 0) { 
+        if (x <= 0 && y <= 1) {
             // Reach end point.
             Hit(hp);
             getPlayScene()->Hitenemy();
@@ -155,7 +155,8 @@ void Fighter::Update(float deltaTime) {
 
 void Fighter::AttackEnemy(Enemy *enemy) {
     if (enemy) {
-        getPlayScene()->EffectGroup->AddNewObject(new ShockwaveEffect(Position.x, Position.y, damageRange));
+        if(!isSwordFighter)
+            getPlayScene()->EffectGroup->AddNewObject(new ShockwaveEffect(Position.x, Position.y, damageRange));
         enemy->Hit(damage); // Assuming each fighter does 10 damage.
         AudioHelper::PlayAudio("NeverGonnaGiveYouUp.wav");
     }
