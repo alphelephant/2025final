@@ -622,8 +622,8 @@ void PlayScene::BacktoStageSelect() {
     Engine::GameEngine::GetInstance().ChangeScene("stage-select");
 }
 void PlayScene::UIBtnClicked(int id) {
-    if (preview)
-        UIGroup->RemoveObject(preview->GetObjectIterator());
+    
+    Turret *next_preview = nullptr;
     if (shovelMode) {
         // Exit Shovel mode if shovel button is clicked.
         SetShovelMode(false);
@@ -631,11 +631,11 @@ void PlayScene::UIBtnClicked(int id) {
         return;
     }
     if (id == 0 && money >= MachineGunTurret::Price)
-        preview = new MachineGunTurret(0, 0);
+        next_preview = new MachineGunTurret(0, 0);
     else if (id == 1 && money >= LaserTurret::Price)
-        preview = new LaserTurret(0, 0);
+        next_preview = new LaserTurret(0, 0);
     else if (id == 2 && money >= LaserSource::Price) // LaserSource 
-        preview = new LaserSource(0, 0, 0);
+        next_preview = new LaserSource(0, 0, 0);
     else if(id == 3 && money >= 10){
         SetShovelMode(true);
     }
@@ -651,8 +651,11 @@ void PlayScene::UIBtnClicked(int id) {
         FighterGroup->AddNewObject(tankFighter);
         return;
     }
-    if (!preview)
-        return;
+    if (!next_preview)
+        return; // No enough money or invalid turret type.
+    if (preview)
+        UIGroup->RemoveObject(preview->GetObjectIterator());
+    preview = next_preview;
     preview->Position = Engine::GameEngine::GetInstance().GetMousePosition();
     preview->Tint = al_map_rgba(255, 255, 255, 200);
     preview->Enabled = false;
