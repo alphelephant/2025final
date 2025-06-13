@@ -15,6 +15,7 @@ BlueEnemy::BlueEnemy(float x, float y)
     damage = 5;
     detectRange = 180;
     attackRange = 220;
+    coolDown = 0.3f; // 攻擊冷卻時間
 }
 void BlueEnemy::OnExplode(){
     getPlayScene()->EffectGroup->AddNewObject(new ExplosionEffect(Position.x, Position.y));

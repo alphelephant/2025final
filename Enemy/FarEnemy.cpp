@@ -14,7 +14,7 @@
 FarEnemy::FarEnemy(int x, int y) 
   : Enemy("play/enemy-10.png", x, y, 20, 50, 200, 25) {
     // float radius, float speed, float hp, int money
-    
+    // damage = 80;
     detectRange = 1000.0f; // 偵測範圍
     attackRange = 1500.0f; // 攻擊範圍
     coolDown = 12.0f; // 攻擊冷卻時間

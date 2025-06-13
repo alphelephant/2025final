@@ -12,7 +12,6 @@
 SuicideEnemy::SuicideEnemy(float x, float y)
   : Enemy("play/enemy-6.png", x, y, 20, 500, 20, 100) {
     // float radius, float speed, float hp, int money
-    isFighterEnemy = true; // 設定為 FighterEnemy
     damage = 9999; // 自爆傷害
     detectRange = 200; // 偵測範圍
     attackRange = 350; // 攻擊範圍
