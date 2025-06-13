@@ -17,7 +17,7 @@ protected:
     std::vector<Engine::Point> path;
     float damage;
     float speed;
-    float hp;
+    float hp, maxHp;
     float attackRange;
     float attackSpeed;
     float damageRange;

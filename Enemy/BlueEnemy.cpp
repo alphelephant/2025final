@@ -41,11 +41,9 @@ void BlueEnemy::Destruct() {
         if (!turret) continue;
         float dist = (turret->Position - Position).Magnitude();
         if (dist <= explosionRadius) {
-            
-            turret->Hit(5);
+            turret->Hit(damage);
         }
     }
-    
 }
 
 void BlueEnemy::Update(float deltaTime) {

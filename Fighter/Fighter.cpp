@@ -35,6 +35,7 @@ PlayScene *Fighter::getPlayScene() {
 Fighter::Fighter(std::string img, float x, float y, float radius, float speed, float hp, float attackRange,float damageRange, float attackSpeed) : Engine::Sprite(img, x, y), speed(speed), hp(hp), attackRange(attackRange),damageRange(damageRange) , attackSpeed(attackSpeed) {
     CollisionRadius = radius;
     reload = 0;
+    maxHp = hp; // 設定最大生命值
     TargetEnemy = nullptr;
     PlayScene* scene = getPlayScene();
     FindPath = scene->FightDistance;
@@ -165,4 +166,16 @@ void Fighter::Draw() const {
         // Draw collision radius.
         al_draw_circle(Position.x, Position.y, attackRange, al_map_rgb(0, 0, 255), 2);
     }
+    // 血量條
+    float barWidth = 40;
+    float barHeight = 6;
+    float hpPercent = std::max(hp, 0.0f) / maxHp;
+    float left = Position.x - barWidth / 2;
+    float top = Position.y+25;
+    // 背景
+    al_draw_filled_rectangle(left, top, left + barWidth, top + barHeight, al_map_rgb(100, 100, 100));
+    // 血量
+    al_draw_filled_rectangle(left, top, left + barWidth * hpPercent, top + barHeight, al_map_rgb(0, 128, 255));
+    // 邊框
+    al_draw_rectangle(left, top, left + barWidth, top + barHeight, al_map_rgb(0, 0, 0), 2);
 }

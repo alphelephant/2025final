@@ -8,6 +8,7 @@ private:
     float reload=0;
     float triggerRadius;
     float explosionRadius;
+    float damage = 5;
     void Destruct();
     void OnExplode()override;
 public:

@@ -1,31 +1,53 @@
-#include <allegro5/base.h>
-#include <random>
+#include <cmath>
 #include <string>
-
-#include "Engine/Point.hpp"
 #include "FighterEnemy.hpp"
+#include "Fighter/Fighter.hpp"
+#include "Engine/AudioHelper.hpp"
+#include "Scene/PlayScene.hpp"
+#include "UI/Animation/ExplosionEffect.hpp"
 
-FighterEnemy::FighterEnemy(int x, int y)
-    : Enemy("play/enemy-3.png", x, y, 20, 60, 500, 60),
-      head("play/enemy-3-head.png", x, y), targetRotation(0) {
-        maxHp = hp; // 設定最大生命值
-    }
-void FighterEnemy::Draw() const {
-    Enemy::Draw();
-    head.Draw();
-}
+FighterEnemy::FighterEnemy(int x, int y) :
+    Enemy("play/enemy-7.png", x, y, 10, 150, 500, 20) {
+    maxHp = hp;
+} // float radius, float speed, float hp, int money
+
 void FighterEnemy::Update(float deltaTime) {
-    Enemy::Update(deltaTime);
-    head.Position = Position;
-    // Choose arbitrary one.
-    std::random_device dev;
-    std::mt19937 rng(dev());
-    std::uniform_real_distribution<> dist(0.0f, 4.0f);
-    float rnd = dist(rng);
-    if (rnd < deltaTime) {
-        // Head arbitrary rotation.
-        std::uniform_real_distribution<> distRadian(-ALLEGRO_PI, ALLEGRO_PI);
-        targetRotation = distRadian(rng);
+    PlayScene* scene = getPlayScene();
+    bool foundFighter = false;
+
+    // 檢查範圍內是否有任何Fighter
+    for (auto& obj : scene->FighterGroup->GetObjects()) {
+        auto fighter = dynamic_cast<Fighter*>(obj);
+        if (!fighter) continue;
+        Engine::Point diff = fighter->Position - Position;
+        if (diff.Magnitude() <= attackRange) {
+            foundFighter = true;
+            break;
+        }
     }
-    head.Rotation = (head.Rotation + deltaTime * targetRotation) / (1 + deltaTime);
+
+    if (foundFighter) {
+        // 停止移動
+        Velocity = Engine::Point(0, 0);
+        reload -= deltaTime;
+        if (reload <= 0) {
+            // 範圍攻擊所有Fighter
+            for (auto& obj : scene->FighterGroup->GetObjects()) {
+                if (!obj) continue;
+                auto fighter = dynamic_cast<Fighter*>(obj);
+                if (!fighter) continue;
+                Engine::Point diff = fighter->Position - Position;
+                if (diff.Magnitude() <= attackRange) {
+                    fighter->Hit(damage);
+                }
+            }
+            // 播放特效與音效
+            scene->EffectGroup->AddNewObject(new ShockwaveEffect(Position.x, Position.y, attackRange));
+            AudioHelper::PlayAudio("explosion.wav");
+            reload = attackSpeed;
+        }
+    } else {
+        // 沒有Fighter則照常移動
+        Enemy::Update(deltaTime);
+    }
 }
