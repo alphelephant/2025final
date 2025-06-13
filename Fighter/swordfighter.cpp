@@ -11,7 +11,7 @@
 SwordFighter::SwordFighter(float x, float y) : Fighter("play/Swordman.png", x, y,
     /*detactradian*/25, /*speed*/250,
     /*hp*/ 100,
-    /*attack range*/ 100 ,/*damageRange*/100, /*attackspeed*/ 0.5f),runFrameCount(16),attackFrameCount(7)    
+    /*attack range*/ 100 ,/*damageRange*/100, /*attackspeed*/ 0.6f),runFrameCount(16),attackFrameCount(7)    
     {
     damage = 50;
     runBmp = Engine::Resources::GetInstance().GetBitmap("play/RUN.png");

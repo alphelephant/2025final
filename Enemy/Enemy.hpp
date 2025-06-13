@@ -42,5 +42,17 @@ public:
     void UpdatePath(const std::vector<std::vector<int>> &mapDistance);
     virtual void Update(float deltaTime) override;
     void Draw() const override;
+    float GetInfo(std::string str){
+        if (str == "hp") return hp;
+        if (str == "maxHp") return maxHp;
+        if (str == "speed") return speed;
+        if (str == "money") return money;
+        if (str == "damage") return damage;
+        if (str == "detectRange") return detectRange;
+        if (str == "attackRange") return attackRange;
+        if (str == "coolDown") return coolDown;
+        if (str == "reload") return reload;
+        return 0.0f;
+    }
 };
 #endif   // ENEMY_HPP
