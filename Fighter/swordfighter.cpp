@@ -36,7 +36,6 @@ void SwordFighter::Update(float deltaTime) {
 void SwordFighter::AttackEnemy(Enemy *enemy) {
     Fighter::AttackEnemy(enemy);
     AudioHelper::PlayAudio("sword.wav");
-
 }
 void SwordFighter::Draw() const {
     std::shared_ptr<ALLEGRO_BITMAP> bmp = isAttacking ? attackBmp : runBmp;

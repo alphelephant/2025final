@@ -46,10 +46,10 @@ void Fighter::Hit(float damage) {
     if (hp <= 0) {
         //OnExplode();
         // Remove all turret's reference to target.
-        /*for (auto &it : lockedEnemy)
-            it->Target = nullptr;
-        for (auto &it : lockedBullets)
-            it->Target = nullptr;*///這邊有點問題之後再改
+        for (auto &it : lockedEnemy)
+            it = nullptr;
+        /*for (auto &it : lockedBullets)
+            it->Target = nullptr;*///這邊有點問題之後再改*/
         getPlayScene()->FighterGroup->RemoveObject(objectIterator);
         //AudioHelper::PlayAudio("explosion.wav");
     }

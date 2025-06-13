@@ -61,7 +61,6 @@ void BlueEnemy::Update(float deltaTime) {
         if (dist <= detectRange && reload <= 0) {
             reload = coolDown; // 重置冷卻時間
             Destruct();
-            //return;  // 自爆後不再繼續
         }
     }
 }

@@ -15,7 +15,6 @@
 #include "Scene/PlayScene.hpp"
 #include "Turret/Turret.hpp"
 #include "Fighter/Fighter.hpp"
-#include "Fighter/Fighter.hpp"
 #include "UI/Animation/DirtyEffect.hpp"
 #include "UI/Animation/ExplosionEffect.hpp"
 
@@ -100,22 +99,6 @@ void Enemy::UpdatePath(const std::vector<std::vector<int>> &mapDistance) {
 }
 void Enemy::Update(float deltaTime) {
     PlayScene* scene = getPlayScene();
-
-    if(isFighterEnemy){
-        // 檢查範圍內是否有任何Fighter
-        for (auto& obj : scene->FighterGroup->GetObjects()) {
-            auto fighter = dynamic_cast<Fighter*>(obj);
-            if (!fighter) continue;
-            Engine::Point diff = fighter->Position - Position;
-            if (diff.Magnitude() <= attackRange) {
-                // 停止移動
-                Velocity = Engine::Point(0,0);
-                Sprite::Update(deltaTime);
-                return; // 停止更新位置
-            }
-        }
-    }
-    
     // Pre-calculate the velocity.
     int x = static_cast<int>(floor(Position.x / PlayScene::BlockSize));
     int y = static_cast<int>(floor(Position.y / PlayScene::BlockSize));
@@ -153,6 +136,29 @@ void Enemy::Update(float deltaTime) {
     }
     // 設定旋轉角度
     Rotation = atan2(Velocity.y, Velocity.x);
+    if (isFighterEnemy) {
+        auto allFighters = scene->FighterGroup->GetObjects();    // 快照
+        std::vector<Fighter*> targets;
+        for (auto obj : allFighters) {
+            auto fighter = dynamic_cast<Fighter*>(obj);
+            if (!fighter) continue;
+            if ((fighter->Position - Position).Magnitude() <= attackRange) {
+                Velocity = Engine::Point(0, 0); // 停止移動
+                targets.push_back(fighter);
+            }
+        }
+        // 然后再统一攻击
+        for (auto fighter : targets) {
+            if (reload <= 0) {
+                fighter->Hit(damage);
+                AudioHelper::PlayAudio("explosion.wav");
+                reload = coolDown;
+                scene->EffectGroup->AddNewObject(
+                    new ShockwaveEffect(Position.x, Position.y, attackRange)
+                );
+            }
+        }
+    }
     Sprite::Update(deltaTime);
 }
 void Enemy::Draw() const {
