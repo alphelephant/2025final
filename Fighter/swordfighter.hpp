@@ -5,11 +5,11 @@
 class SwordFighter : public Fighter {
 public:
     SwordFighter(float x, float y);
-    void Draw() const override {
+   /* void Draw() const override {
         // Draw the sword fighter with a specific image.
         Engine::Sprite::Draw();
-
-    }
+    }*/
+    static const int Price = 250;
 };
 
 #endif   // SWORDFIGHTER_HPP

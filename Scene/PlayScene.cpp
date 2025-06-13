@@ -35,6 +35,7 @@
 #include "Bullet/Beam.hpp"
 #include "Fighter/Fighter.hpp"
 #include "Fighter/TankFighter.hpp"
+#include "Fighter/SwordFighter.hpp"
 
 // TODO HACKATHON-4 (1/3): Trace how the game handles keyboard input.
 // TODO HACKATHON-4 (2/3): Find the cheat code sequence in this file.
@@ -593,21 +594,21 @@ void PlayScene::ConstructUI() {
     UIGroup->AddNewControlObject(btn);
     // Button 2
     btn = new TurretButton("play/floor.png", "play/dirt.png",
-                           Engine::Sprite("play/tower-base.png", Sandpos + 76, 136, 0, 0, 0, 0),
-                           Engine::Sprite("play/turret-2.png", Sandpos + 76, 136 - 8, 0, 0, 0, 0), Sandpos + 76, 136, LaserTurret::Price);
+                           Engine::Sprite("play/tower-base.png", Sandpos + 86, 136, 0, 0, 0, 0),
+                           Engine::Sprite("play/turret-2.png", Sandpos + 86, 136 - 8, 0, 0, 0, 0), Sandpos + 86, 136, LaserTurret::Price);
     btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 1));
     UIGroup->AddNewControlObject(btn);
     // Button 3
     btn = new TurretButton("play/floor.png", "play/dirt.png",
-                        Engine::Sprite("play/tower-base.png", Sandpos + 156, 136, 0, 0, 0, 0),
-                        Engine::Sprite("play/turret-7.png", Sandpos + 156, 136 - 8, 0, 0, 0, 0), Sandpos + 156, 136, LaserSource::Price);
+                        Engine::Sprite("play/tower-base.png", Sandpos + 158, 136, 0, 0, 0, 0),
+                        Engine::Sprite("play/turret-7.png", Sandpos + 158, 136 - 8, 0, 0, 0, 0), Sandpos + 158, 136, LaserSource::Price);
     btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 2)); // 使用 ID 2 表示 LaserSource
     UIGroup->AddNewControlObject(btn);
     //Button 4
     
     Shovel *shl = new Shovel("play/floor.png", "play/dirt.png",
-                           Engine::Sprite("play/shovel-base.png", Sandpos + 236, 136, 50, 50, -0.14, -0.14),
-                           Engine::Sprite("play/shovel.png", Sandpos + 236, 136 - 8, 0, 0, 0, 0), Sandpos + 236, 136, 0);
+                           Engine::Sprite("play/shovel-base.png", Sandpos + 230, 136, 50, 50, -0.14, -0.14),
+                           Engine::Sprite("play/shovel.png", Sandpos + 230, 136 - 8, 0, 0, 0, 0), Sandpos + 230, 136, 0);
     shl->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 3));
     UIGroup->AddNewControlObject(shl);
     
@@ -617,7 +618,12 @@ void PlayScene::ConstructUI() {
         Engine::Sprite("play/enemy-4.png", Sandpos + 14 + 7, 136 + 64 + 16 + 7, 0, 0, 0, 0), Sandpos + 14, 136 + 64 + 16, TankFighter::Price);
     TankfighterBtn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 4));
     UIGroup->AddNewControlObject(TankfighterBtn);
-    
+    //Button 6
+    TurretButton* SwordFighterBtn = new TurretButton("play/floor.png", "play/dirt.png",
+        Engine::Sprite("play/tower-base.png", Sandpos + 14 + 64 + 8, 136 + 64 + 16 , 0, 0, 0, 0),
+        Engine::Sprite("play/enemy-5.png", Sandpos + 14 + 7 + 64 + 8, 136 + 64 + 16 + 7, 0, 0, 0, 0), Sandpos + 14 + 64 + 8, 136  + 16 + 64, SwordFighter::Price);
+    SwordFighterBtn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 5));
+    UIGroup->AddNewControlObject(SwordFighterBtn);
     //Back Button
     int halfW = w / 2;
     int halfH = h / 2;
@@ -682,6 +688,18 @@ void PlayScene::UIBtnClicked(int id) {
         TankFighter* tankFighter = new TankFighter(start.x, start.y);
         tankFighter->UpdatePath(FightDistance, 0, 0);
         FighterGroup->AddNewObject(tankFighter);
+        return;
+    }
+    else if (id == 5 && money >= SwordFighter::Price) {
+        // 產生 TankFighter
+        EarnMoney(-SwordFighter::Price);
+        Engine::Point start = Engine::Point(
+            (EndGridPoint.x )* BlockSize + BlockSize / 2,
+            (EndGridPoint.y )* BlockSize + BlockSize / 2
+        );
+        SwordFighter* swordFighter = new SwordFighter(start.x, start.y);
+        swordFighter->UpdatePath(FightDistance, 0, 0);
+        FighterGroup->AddNewObject(swordFighter);
         return;
     }
     if (!next_preview)
