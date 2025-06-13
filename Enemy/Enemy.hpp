@@ -15,13 +15,17 @@ class Fighter;
 class Enemy : public Engine::Sprite {
 protected:
     std::vector<Engine::Point> path;
+    //float CollisionRadius; // 碰撞半徑
     float speed;
-    float hp,maxHp;
+    float hp, maxHp;
     int money;
-    float damage;
-    float attackRange;
-    float attackSpeed;
     bool isFighterEnemy = false; // 是否為 FighterEnemy
+
+    float damage = 0;
+    float detectRange = 0; // 偵測範圍
+    float attackRange = 0; // 攻擊範圍
+    float coolDown = 0.0f; // 攻擊冷卻時間
+    
     PlayScene *getPlayScene();
     virtual void OnExplode();
     virtual void CreateBullet();

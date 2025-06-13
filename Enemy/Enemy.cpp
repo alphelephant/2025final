@@ -38,6 +38,7 @@ void Enemy::CreateBullet() {
     // Override this method in derived classes to create specific enemy bullets.
 }
 Enemy::Enemy(std::string img, float x, float y, float radius, float speed, float hp, int money) : Engine::Sprite(img, x, y), speed(speed), hp(hp), money(money) {
+    maxHp = hp; // Set the maximum HP.
     CollisionRadius = radius; // Set the collision radius.
     reachEndTime = 0;
 }
@@ -109,6 +110,7 @@ void Enemy::Update(float deltaTime) {
             if (diff.Magnitude() <= attackRange) {
                 // 停止移動
                 Velocity = Engine::Point(0,0);
+                Sprite::Update(deltaTime);
                 return; // 停止更新位置
             }
         }

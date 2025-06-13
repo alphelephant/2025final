@@ -4,11 +4,7 @@
 
 class BlueEnemy : public Enemy {
 private:
-    float coolDown=0.3f; // 冷卻時間
-    float reload=0;
-    float triggerRadius;
-    float explosionRadius;
-    float damage = 5;
+    float reload = 0;
     void Destruct();
     void OnExplode() override;
 public:

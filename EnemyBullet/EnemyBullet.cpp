@@ -15,7 +15,7 @@ PlayScene *EnemyBullet::getPlayScene() {
 void EnemyBullet::OnExplode(Turret *turret) {
 }
 EnemyBullet::EnemyBullet(std::string img, float speed, float damage, Engine::Point position, Engine::Point forwardDirection, float rotation, Enemy *parent) 
-    : Sprite(img, position.x, position.y), speed(speed), damage(damage), parent(parent) {
+  : Sprite(img, position.x, position.y), speed(speed), damage(damage), parent(parent) {
     Velocity = forwardDirection.Normalize() * speed;
     Rotation = rotation;
     CollisionRadius = 4;
