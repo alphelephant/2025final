@@ -31,7 +31,11 @@ protected:
     int money;
     int SpeedMult;
     int score = 0;
-    int maxlives ;
+    int maxlives;
+    float laserEyesTimer = 0.0f;
+    bool angryMode = false; // Angry mode for laser eyes 
+    int enemylives ;
+    int maxenemylives ;
 
 public:
     static bool DebugMode;
@@ -86,6 +90,7 @@ public:
     void OnMouseUp(int button, int mx, int my) override;
     void OnKeyDown(int keyCode) override;
     void Hit();
+    void Hitenemy();
     int GetMoney() const;
     void EarnMoney(int money);
     void ReadMap();

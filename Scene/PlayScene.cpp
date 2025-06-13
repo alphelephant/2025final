@@ -66,6 +66,8 @@ void PlayScene::Initialize() {
     maxlives = 10;
     money = 150;
     SpeedMult = 1;
+    enemylives = 10;
+    maxenemylives = 10;
     // Add groups from bottom to top.
     AddNewObject(TileMapGroup = new Group());
     AddNewObject(GroundEffectGroup = new Group());
@@ -223,9 +225,20 @@ void PlayScene::Update(float deltaTime) {
         // To keep responding when paused.
         shovelPreview->Update(deltaTime);
     }
+    if( laserEyesTimer > 0) {
+        laserEyesTimer -= deltaTime;
+        angryMode = true; // 激光眼模式啟用
+        if (laserEyesTimer <= 0) {
+            laserEyesTimer = 0;
+            angryMode = false; // 激光眼模式結束
+        }
+    }
 }
 void PlayScene::Draw() const {
     IScene::Draw();
+    if (laserEyesTimer > 0 && angryMode) {
+        //UIGroup->AddNewObject(new Engine::Image("play/LaserEyes.png", 1187 - 50 , 643 + 41, 140, 40));
+    }
     int barX = 1150; // homebase 圖片中心 x
     int barY = 643 - 20;  // homebase 圖片上方 y
     int barW = 120;       // 血條寬度
@@ -241,6 +254,7 @@ void PlayScene::Draw() const {
     label.Anchor = Engine::Point(0.5, 0.5);
     label.Draw();
     if (DebugMode) {
+        //UIGroup->AddNewObject(new Engine::Image("play/LaserEyes.png", 1187 - 50 , 643 + 41, 140, 40));
         // Draw reverse BFS distance on all reachable blocks.
         for (int i = 0; i < MapHeight; i++) {
             for (int j = 0; j < MapWidth; j++) {
@@ -420,9 +434,16 @@ void PlayScene::OnKeyDown(int keyCode) {
 }
 void PlayScene::Hit() {
     lives--;
+    laserEyesTimer = 0.5f;
     UILives->Text = std::string("Life ") + std::to_string(lives);
     if (lives <= 0) {
         Engine::GameEngine::GetInstance().ChangeScene("lose");
+    }
+}
+void PlayScene::Hitenemy() {
+    enemylives--;
+    if (enemylives <= 0) {
+        Engine::GameEngine::GetInstance().ChangeScene("win");
     }
 }
 int PlayScene::GetMoney() const {
@@ -519,9 +540,10 @@ void PlayScene::ReadEnemyWave() {
 void PlayScene::ConstructUI() {
     // Background
     UIGroup->AddNewObject(new Engine::Image("play/sand.png", 1280, 0, 320, 832));
-     UIGroup->AddNewObject(new Engine::Image("play/homebase.png", 1150 - 15, 700 + 15, 150, 150));
-     UIGroup->AddNewObject(new Engine::Image("play/home.png", 1187 - 15, 643 + 15, 76, 152));
-    
+    UIGroup->AddNewObject(new Engine::Image("play/homebase.png", 1150 - 15, 700 + 15, 150, 150));
+    UIGroup->AddNewObject(new Engine::Image("play/home.png", 1187 - 15, 643 + 15, 76, 152));
+    //UIGroup->AddNewObject(new Engine::Image("play/LaserEyes.png", 1187 - 50 , 643 + 41, 140, 40));
+
     // Text
     UIGroup->AddNewObject(new Engine::Label(std::string("Stage ") + std::to_string(MapId), "pirulen.ttf", 32, Sandpos + 14, 0));
     UIGroup->AddNewObject(UIMoney = new Engine::Label(std::string("$") + std::to_string(money), "pirulen.ttf", 24, Sandpos + 14 , 48));

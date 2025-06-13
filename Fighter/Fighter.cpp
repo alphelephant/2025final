@@ -94,7 +94,7 @@ void Fighter::Update(float deltaTime) {
         if (x <= 0 && y <= 0) { 
             // Reach end point.
             Hit(hp);
-            //getPlayScene()->Hit();
+            getPlayScene()->Hitenemy();
             reachEndTime = 0;
             return;
         }
