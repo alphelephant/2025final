@@ -13,13 +13,15 @@ void InfoScene::Initialize() {
         {"play/enemy-6.png", "Boomer", "d"},
         {"play/enemy-9.png", "Pulsefiend", "e"},
         {"play/enemy-10.png", "Sniper", "f"},
+        {"play/enemy-7.png", "Destroyer", "g"}
     };
     // 填入砲台資料
     turretItems = {
         {"play/turret-1.png", "Gun", "1"},
         {"play/turret-2.png", "Cannon", "2"},
         {"play/turret-7.png", "Laser", "3"},
-        {"play/enemy-4.png", "Blocker", "4"},
+        {"play/enemy-4.png", "Fighter", "4"},
+        
     };
 
     int w = Engine::GameEngine::GetInstance().GetScreenSize().x;

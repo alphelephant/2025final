@@ -19,7 +19,9 @@ static float getdistance(const Engine::Point &p,const Engine::Point &v,const Eng
     Engine::Point proj = v + vw * t;
     return (p - proj).Magnitude();
 }
-Beam::Beam(Engine::Point position, Engine::Point forwardDirection, float rotation, Turret *parent) : Bullet("play/laserbeam.png", 0, 200, position, forwardDirection, rotation - ALLEGRO_PI / 2, parent) {
+Beam::Beam(Engine::Point position, Engine::Point forwardDirection, float rotation, Turret *parent) 
+  : Bullet("play/laserbeam.png", 0.1, 200, position, forwardDirection, rotation - ALLEGRO_PI / 2, parent) {
+        //speed, damage
     hitCount = 0;
 }
 void Beam::OnExplode(Enemy *enemy) {

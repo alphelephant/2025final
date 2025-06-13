@@ -8,7 +8,8 @@
 PlayScene *Shovel::getPlayScene() {
     return dynamic_cast<PlayScene *>(Engine::GameEngine::GetInstance().GetActiveScene());
 }
-Shovel::Shovel(std::string img, std::string imgIn, Engine::Sprite Base, Engine::Sprite shovel, float x, float y, int money) : ImageButton(img, imgIn, x, y), money(10), Base(Base), shovel(shovel) {
+Shovel::Shovel(std::string img, std::string imgIn, Engine::Sprite Base, Engine::Sprite shovel, float x, float y, int money) 
+  : ImageButton(img, imgIn, x, y), money(10), Base(Base), shovel(shovel) {
 }
 void Shovel::Update(float deltaTime) {
     ImageButton::Update(deltaTime);
