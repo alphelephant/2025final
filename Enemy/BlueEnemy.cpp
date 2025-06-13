@@ -15,6 +15,7 @@ BlueEnemy::BlueEnemy(float x, float y)
     triggerRadius(180), explosionRadius(220)
 {
     maxHp = hp; // 設定最大生命值
+    isFighterEnemy = true; // 設定為 FighterEnemy
 }
 void BlueEnemy::OnExplode(){
     getPlayScene()->EffectGroup->AddNewObject(new ExplosionEffect(Position.x, Position.y));

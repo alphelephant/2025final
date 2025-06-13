@@ -7,8 +7,9 @@
 #include "UI/Animation/ExplosionEffect.hpp"
 
 FighterEnemy::FighterEnemy(int x, int y) :
-    Enemy("play/enemy-7.png", x, y, 10, 150, 500, 20) {
+    Enemy("play/enemy-7.png", x, y, 10, 150, 300, 20) {
     maxHp = hp;
+    isFighterEnemy = true; // 設定為 FighterEnemy
 } // float radius, float speed, float hp, int money
 
 void FighterEnemy::Update(float deltaTime) {
