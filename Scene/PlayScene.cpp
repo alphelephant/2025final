@@ -428,9 +428,9 @@ void PlayScene::OnKeyDown(int keyCode) {
     }else if (keyCode == ALLEGRO_KEY_E) {
         // Hotkey for LaserSource.
         UIBtnClicked(2);
-    }else if (keyCode == ALLEGRO_KEY_R) {
+    }else if (keyCode == ALLEGRO_KEY_A) {
         UIBtnClicked(4);
-    }else if (keyCode == ALLEGRO_KEY_T) {
+    }else if (keyCode == ALLEGRO_KEY_S) {
         UIBtnClicked(5);
     }
     else if (keyCode >= ALLEGRO_KEY_0 && keyCode <= ALLEGRO_KEY_9) {
