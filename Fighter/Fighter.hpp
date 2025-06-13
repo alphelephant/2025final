@@ -38,11 +38,10 @@ public:
     //std::list<Fighter *> lockedFighter;
     Fighter(std::string img, float x, float y, float radius, float speed, float hp, float attackRange, float damageRange,float attackSpeed);
     void Hit(float damage);
-    void UpdatePath(const std::vector<std::vector<int>> &mapDistance, int endx, int endy);
+    virtual void UpdatePath(const std::vector<std::vector<int>> &mapDistance, int endx, int endy);
     void Update(float deltaTime) override;
     virtual void AttackEnemy(Enemy *enemy);
-    void AttackBase();
     void Draw() const override;
-    void ApproachTarget(float deltaTime);
+    virtual void ApproachTarget(float deltaTime);
 };
 #endif   // FIGHTER_HPP

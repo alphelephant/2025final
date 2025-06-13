@@ -449,6 +449,7 @@ void PlayScene::Hit() {
 void PlayScene::Hitenemy() {
     enemylives--;
     if (enemylives <= 0) {
+        score = money / 100 + lives * 10;
         Engine::GameEngine::GetInstance().ChangeScene("win");
     }
 }
