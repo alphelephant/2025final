@@ -4,8 +4,6 @@
 
 class SuicideEnemy : public Enemy {
 private:
-    float triggerRadius;
-    float explosionRadius;
     void SelfDestruct();
     void OnExplode() override;
     bool isExploded = false;

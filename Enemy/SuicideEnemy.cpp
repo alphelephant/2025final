@@ -10,12 +10,13 @@
 #include "Fighter/Fighter.hpp"
 
 SuicideEnemy::SuicideEnemy(float x, float y)
-  : Enemy("play/enemy-6.png", x, y,
-          /*radius=*/20, /*speed=*/500,
-          /*hp=*/20, /*money=*/100),
-    triggerRadius(200), explosionRadius(350)
-{
-    maxHp = hp; // 設定最大生命值
+  : Enemy("play/enemy-6.png", x, y, 20, 500, 20, 100) {
+    // float radius, float speed, float hp, int money
+    isFighterEnemy = true; // 設定為 FighterEnemy
+    damage = 9999; // 自爆傷害
+    detectRange = 200; // 偵測範圍
+    attackRange = 350; // 攻擊範圍
+    coolDown = 0.5f; // 攻擊冷卻時間
 }
 void SuicideEnemy::OnExplode(){
     getPlayScene()->EffectGroup->AddNewObject(new ExplosionEffect(Position.x, Position.y));
@@ -33,51 +34,21 @@ void SuicideEnemy::SelfDestruct() {
     isExploded = true;  // 標記為已自爆
     auto scene = getPlayScene();
     //  效果：爆炸動畫與特效
-    getPlayScene()->EffectGroup->AddNewObject(new ShockwaveEffect(Position.x, Position.y, explosionRadius));
+    getPlayScene()->EffectGroup->AddNewObject(new ShockwaveEffect(Position.x, Position.y, attackRange));
     OnExplode(); 
     AudioHelper::PlayAudio("shockwave.ogg");
 
-    /*// 摧毀範圍內的塔台
-    std::vector<Turret*> turretsToRemove;
+    //對範圍內的塔台造成傷害
     auto towerObjects = scene->TowerGroup->GetObjects();
     for (auto obj : towerObjects) {
         auto turret = dynamic_cast<Turret*>(obj);
         if (!turret) continue;
         float dist = (turret->Position - Position).Magnitude();
-        if (dist <= explosionRadius) {
-            int tx = static_cast<int>(turret->Position.x) / 64;
-            int ty = static_cast<int>(turret->Position.y) / 64;
-            scene->mapState[ty][tx] = PlayScene::TileType::TILE_FLOOR;  // 恢復地面狀態
-            turretsToRemove.push_back(turret);
+        if (dist <= attackRange) {
+            turret->Hit(damage);
         }
     }
-    for (auto turret : turretsToRemove) {
-        scene->TowerGroup->RemoveObject(turret->GetObjectIterator());
-    }*/
-    // ...existing code...
-    // 摧毀範圍內的塔台 → 改為對範圍內的塔台造成傷害
-    auto towerObjects = scene->TowerGroup->GetObjects();
-    for (auto obj : towerObjects) {
-        auto turret = dynamic_cast<Turret*>(obj);
-        if (!turret) continue;
-        float dist = (turret->Position - Position).Magnitude();
-        if (dist <= explosionRadius) {
-            turret->Hit(9999); // 例如造成50點傷害，你可依需求調整
-        }
-    }
-    // ...existing code...
-
-    // 3) 自己也從場上移除
-    /*for (auto &it : lockedTurrets)
-        it->Target = nullptr;
-    for (auto &it : lockedBullets)
-        it->Target = nullptr;
-    for (auto &it : lockedFighters) {
-        it->TargetEnemy = nullptr;
-        // 若你想也把迭代器清掉，可以再加：
-        //it->lockedFighterIterator = std::list<Fighter*>::iterator();
-    }
-    scene->EnemyGroup->RemoveObject(objectIterator);*/
+    // 造成傷害給自己，觸發死亡事件
     Hit(hp);
 }
 
@@ -92,7 +63,7 @@ void SuicideEnemy::Update(float deltaTime) {
         auto turret = dynamic_cast<Turret*>(obj);
         if (!turret) continue;
         float dist = (turret->Position - Position).Magnitude();
-        if (dist <= triggerRadius) {
+        if (dist <= detectRange) {
             SelfDestruct();
             return;  // 自爆後不再繼續
         }

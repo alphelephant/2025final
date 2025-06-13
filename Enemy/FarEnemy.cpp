@@ -12,14 +12,20 @@
 
 // TODO HACKATHON-3 (1/3): You can imitate the 2 files: 'SoldierEnemy.hpp', 'SoldierEnemy.cpp' to create a new enemy.
 FarEnemy::FarEnemy(int x, int y) 
-    : Enemy("play/enemy-10.png", x, y, 10, 20, 200, 25) {
-    // 設定 bulletCoolDown 為 5~20 秒的隨機值
+  : Enemy("play/enemy-10.png", x, y, 20, 50, 200, 25) {
+    // float radius, float speed, float hp, int money
+    
+    detectRange = 1000.0f; // 偵測範圍
+    attackRange = 1500.0f; // 攻擊範圍
+    coolDown = 12.0f; // 攻擊冷卻時間
+
+    // 設定 reload 為 5~20 秒的隨機值
     static std::mt19937 rng(static_cast<unsigned>(time(nullptr)));
     std::uniform_real_distribution<float> dist(0.0f, 20.0f);
-    bulletCoolDown = dist(rng);
-        Anchor.y += 8.0f / GetBitmapHeight();
-        maxHp = hp;
-} //float radius, float speed, float hp, int money
+    reload = dist(rng);
+
+    Anchor.y += 8.0f / GetBitmapHeight();
+}
 void FarEnemy::Update(float deltaTime) {
     Enemy::Update(deltaTime); // 保留原本移動等邏輯
     PlayScene *scene = getPlayScene();
@@ -41,9 +47,9 @@ void FarEnemy::Update(float deltaTime) {
         for (auto &it : scene->TowerGroup->GetObjects()) {
             Turret* turret = dynamic_cast<Turret*>(it);
             if (!turret || !turret->Visible) continue; 
-            Engine::Point diff = turret/*it*/->Position - Position;
-            if (diff.Magnitude() <= attackRange) {
-                TargetTurret = /*dynamic_cast<Turret *>(it); ... =*/ turret;
+            Engine::Point diff = turret->Position - Position;
+            if (diff.Magnitude() <= detectRange) {
+                TargetTurret = turret;
                 TargetTurret->lockedFarEnemys.push_back(this);
                 lockedEnemyIterator = std::prev(TargetTurret->lockedFarEnemys.end());
                 break;
@@ -70,10 +76,10 @@ void FarEnemy::Update(float deltaTime) {
         //}
 
         // 更新子彈冷卻計時器
-        bulletCoolDown -= deltaTime;
-        if (bulletCoolDown <= 0) {
+        reload -= deltaTime;
+        if (reload <= 0) {
             CreateBullet();
-            bulletCoolDown = 12.0f; // 12.0秒發射一次，可依需求調整
+            reload = coolDown;
         }
     }
 }

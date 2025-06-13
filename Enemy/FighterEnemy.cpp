@@ -6,11 +6,15 @@
 #include "Scene/PlayScene.hpp"
 #include "UI/Animation/ExplosionEffect.hpp"
 
-FighterEnemy::FighterEnemy(int x, int y) :
-    Enemy("play/enemy-7.png", x, y, 10, 150, 300, 20) {
-    maxHp = hp;
+FighterEnemy::FighterEnemy(int x, int y)
+  : Enemy("play/enemy-7.png", x, y, 20, 150, 300, 20) {
+    // float radius, float speed, float hp, int money
+    damage = 20; // 設定傷害
+    detectRange = 120; // 偵測範圍
+    attackRange = 120; // 攻擊範圍
+    coolDown = 0.5f; // 攻擊冷卻時間
     isFighterEnemy = true; // 設定為 FighterEnemy
-} // float radius, float speed, float hp, int money
+}
 
 void FighterEnemy::Update(float deltaTime) {
     PlayScene* scene = getPlayScene();
@@ -21,7 +25,7 @@ void FighterEnemy::Update(float deltaTime) {
         auto fighter = dynamic_cast<Fighter*>(obj);
         if (!fighter) continue;
         Engine::Point diff = fighter->Position - Position;
-        if (diff.Magnitude() <= attackRange) {
+        if (diff.Magnitude() <= detectRange) {
             foundFighter = true;
             break;
         }
@@ -38,14 +42,14 @@ void FighterEnemy::Update(float deltaTime) {
                 auto fighter = dynamic_cast<Fighter*>(obj);
                 if (!fighter) continue;
                 Engine::Point diff = fighter->Position - Position;
-                if (diff.Magnitude() <= attackRange) {
+                if (diff.Magnitude() <= detectRange) {
                     fighter->Hit(damage);
                 }
             }
             // 播放特效與音效
             scene->EffectGroup->AddNewObject(new ShockwaveEffect(Position.x, Position.y, attackRange));
             AudioHelper::PlayAudio("explosion.wav");
-            reload = attackSpeed;
+            reload = coolDown; // 重置冷卻時間
         }
     } else {
         // 沒有Fighter則照常移動
