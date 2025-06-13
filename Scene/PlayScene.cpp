@@ -67,7 +67,7 @@ void PlayScene::Initialize() {
     money = 150;
     SpeedMult = 1;
     enemylives = 10;
-    maxenemylives = 15;
+    maxenemylives = 10;
     // Add groups from bottom to top.
     AddNewObject(TileMapGroup = new Group());
     AddNewObject(GroundEffectGroup = new Group());
@@ -183,7 +183,7 @@ void PlayScene::Update(float deltaTime) {
             continue;
         ticks -= current.second;
         enemyWaveData.pop_front();
-        const Engine::Point SpawnCoordinate = Engine::Point(SpawnGridPoint.x * BlockSize + BlockSize / 2, SpawnGridPoint.y * BlockSize + BlockSize / 2);
+        const Engine::Point SpawnCoordinate = Engine::Point(SpawnGridPoint.x * BlockSize + BlockSize / 2 , SpawnGridPoint.y * BlockSize + BlockSize / 2 + 10);
         Enemy *enemy;
         switch (current.first) {
             case 1:
@@ -242,17 +242,20 @@ void PlayScene::Draw() const {
     int barX = 1150; // homebase 圖片中心 x
     int barY = 643 - 20;  // homebase 圖片上方 y
     int barW = 120;       // 血條寬度
-    int barH = 16;        // 血條高度
+    int barH = 6;        // 血條高度
+    int enemybarx = 8;
+    int enemybary = 135;
+    int enemybarw = 64;
+    int enemybarh = 8;
     float hpPercent = std::max(0, lives) / static_cast<float>(maxlives);
+    float enemyHpPercent = std::max(0, enemylives) / static_cast<float>(maxenemylives);
 
-    // 外框
     al_draw_rectangle(barX, barY, barX + barW, barY + barH, al_map_rgb(0, 0, 0), 2);
-    // 血量
-    al_draw_filled_rectangle(barX, barY, barX + barW * hpPercent, barY + barH, al_map_rgb(255, 0, 0));
-    // 文字
-    Engine::Label label(std::to_string(lives) + " / " + std::to_string(maxlives), "pirulen.ttf", 18, barX + barW / 2, barY + barH / 2);
-    label.Anchor = Engine::Point(0.5, 0.5);
-    label.Draw();
+    al_draw_filled_rectangle(barX, barY, barX + barW * hpPercent, barY + barH, al_map_rgb(0, 0, 255));
+    //Engine::Label label(std::to_string(lives) + " / " + std::to_string(maxlives), "pirulen.ttf", 18, barX + barW / 2, barY + barH / 2);
+    al_draw_rectangle(enemybarx, enemybary, enemybarx + enemybarw, enemybary + enemybarh, al_map_rgb(0, 0, 0), 2);
+    al_draw_filled_rectangle(enemybarx, enemybary, enemybarx + enemybarw * enemyHpPercent, enemybary + enemybarh, al_map_rgb(255, 0, 0));
+    //Engine::Label enemyLabel(std::to_string(enemylives) + " / " + std::to_string(maxenemylives), "pirulen.ttf", 18, enemybarx + enemybarw / 2, enemybary + enemybarh / 2);
     if (DebugMode) {
         //UIGroup->AddNewObject(new Engine::Image("play/LaserEyes.png", 1187 - 50 , 643 + 41, 140, 40));
         // Draw reverse BFS distance on all reachable blocks.
@@ -464,6 +467,7 @@ void PlayScene::ReadMap() {
             case '0': mapData.push_back(0); break;
             case '1': mapData.push_back(1); break;
             case '2': mapData.push_back(2); break;
+            case '3': mapData.push_back(3); break;
             case '\n':
             case '\r':
                 if (static_cast<int>(mapData.size()) / MapWidth != 0)
@@ -482,7 +486,7 @@ void PlayScene::ReadMap() {
         for (int j = 0; j < MapWidth; j++) {
             const int num = mapData[i * MapWidth + j];
             //mapState[i][j] = num ? TILE_FLOOR : TILE_DIRT;
-            if(num == 0){
+            if(num == 0 || num == 3){
                 mapState[i][j] = TILE_DIRT;
             }else if(num == 2 ){
                 mapState[i][j] = TILE_OCCUPIED;
@@ -490,8 +494,14 @@ void PlayScene::ReadMap() {
             else if(num == 1){
                 mapState[i][j] = TILE_FLOOR;
             }
-            if (num==2)
-                TileMapGroup->AddNewObject(new Engine::Image("play/upwall.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+            if (num==2){
+                if(i == 0 && j ==0){
+                    TileMapGroup->AddNewObject(new Engine::Image("play/DoorUp.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+                }else{
+                    TileMapGroup->AddNewObject(new Engine::Image("play/upwall.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+                }
+            }
+                
             else if (num == 0){
                 static std::random_device rd;
                 static std::mt19937 gen(rd());
@@ -507,6 +517,9 @@ void PlayScene::ReadMap() {
                 int imgH = al_get_bitmap_height(bmp);
                 TileMapGroup->AddNewObject(new Engine::Image("play/highground-3.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize*imgH/imgW));*/
                 //TileMapGroup->AddNewObject(new Engine::Image("play/highground-2.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+            }
+            else if(num == 3){
+                TileMapGroup->AddNewObject(new Engine::Image("play/Door.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
             }
             
         }
@@ -544,6 +557,7 @@ void PlayScene::ConstructUI() {
     UIGroup->AddNewObject(new Engine::Image("play/sand.png", 1280, 0, 320, h));
     UIGroup->AddNewObject(new Engine::Image("play/homebase.png", 1150 - 15, 700 + 15, 150, 150));
     UIGroup->AddNewObject(new Engine::Image("play/home.png", 1187 - 15, 643 + 15, 76, 152));
+    UIGroup->AddNewObject(new Engine::Image("play/RIP-2.png", 8, 5, 50, 50));
     //UIGroup->AddNewObject(new Engine::Image("play/LaserEyes.png", 1187 - 50 , 643 + 41, 140, 40));
     //UIGroup->AddNewObject(new Engine::Image("play/Enemydoor-2.png", 0, 0, 32, 80));
     //UIGroup->AddNewObject(new Engine::Image("play/Enemydoor-1.png", 0, 50, 32, 64));
@@ -553,7 +567,12 @@ void PlayScene::ConstructUI() {
         std::uniform_int_distribution<> dis(1, 4);
         int dirtIdx = dis(gen);
         std::string dirtImg = "play/SideWall-" + std::to_string(dirtIdx) + ".png";
-        UIGroup->AddNewObject(new Engine::Image(dirtImg, 0, i * 16, 8, 16));
+        if(i < 4){
+            UIGroup->AddNewObject(new Engine::Image(dirtImg, 64, i * 16, 8, 16));
+        }
+        else{
+            UIGroup->AddNewObject(new Engine::Image(dirtImg, 0, i * 16, 8, 16));
+        }
         UIGroup->AddNewObject(new Engine::Image(dirtImg, 1280 - 8, i * 16, 8, 16));
     }
     for(int i = 0; i < 10; i++){
