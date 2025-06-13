@@ -9,7 +9,7 @@
 #include "UI/Animation/ExplosionEffect.hpp"
 
 BlueEnemy::BlueEnemy(float x, float y)
-  : Enemy("play/enemy-9.png", x, y, 20, 200, 100, 10){
+  : Enemy("play/enemy-9.png", x, y, 20, 200, 100, 50){
     // float radius, float speed, float hp, int money
     isFighterEnemy = true; // 設定為 FighterEnemy
     damage = 5;

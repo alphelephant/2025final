@@ -12,11 +12,11 @@
 #include "TankEnemy.hpp"
 
 TankEnemy::TankEnemy(int x, int y)
-  : Enemy("play/enemy-3.png", x, y, 20, 60, 500, 60),
+  : Enemy("play/enemy-3.png", x, y, 20, 60, 600, 50),
     //float radius, float speed, float hp, int money
   head("play/enemy-3-head.png", x, y), targetRotation(0) {
-    //damage = 10; // 子彈傷害
-    coolDown = 6.0f; // 攻擊冷卻時間
+    //damage = 15; // 子彈傷害
+    coolDown = 5.0f; // 攻擊冷卻時間
 
     static std::mt19937 rng(static_cast<unsigned>(time(nullptr)));
     std::uniform_real_distribution<float> dist(0.0f, 12.0f);

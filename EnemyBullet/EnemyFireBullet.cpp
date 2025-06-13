@@ -12,7 +12,7 @@
 class Turret;
 
 EnemyFireBullet::EnemyFireBullet(Engine::Point position, Engine::Point forwardDirection, float rotation, Enemy *parent) 
-  : EnemyBullet("play/bullet-7.png", 200, 10, position, forwardDirection, rotation - ALLEGRO_PI / 2, parent) {
+  : EnemyBullet("play/bullet-7.png", 200, 15, position, forwardDirection, rotation - ALLEGRO_PI / 2, parent) {
 } //float speed, float damage
 void EnemyFireBullet::OnExplode(Turret *turret) {
     std::random_device dev;

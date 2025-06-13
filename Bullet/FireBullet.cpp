@@ -12,7 +12,7 @@
 class Turret;
 
 FireBullet::FireBullet(Engine::Point position, Engine::Point forwardDirection, float rotation, Turret *parent) 
-  : Bullet("play/bullet-1.png", 500, 5, position, forwardDirection, rotation - ALLEGRO_PI / 2, parent) {
+  : Bullet("play/bullet-1.png", 600, 5, position, forwardDirection, rotation - ALLEGRO_PI / 2, parent) {
     //speed, damage
 } 
 void FireBullet::OnExplode(Enemy *enemy) {

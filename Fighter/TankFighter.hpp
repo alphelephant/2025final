@@ -5,7 +5,7 @@
 class TankFighter : public Fighter {
 public:
     TankFighter(float x, float y);
-    static const int Price = 500; // The price of the tank fighter.
+    static const int Price = 100; // The price of the tank fighter.
     void AttackEnemy(Enemy *enemy) override;
 
 };

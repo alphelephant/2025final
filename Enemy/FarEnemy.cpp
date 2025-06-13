@@ -12,12 +12,12 @@
 
 // TODO HACKATHON-3 (1/3): You can imitate the 2 files: 'SoldierEnemy.hpp', 'SoldierEnemy.cpp' to create a new enemy.
 FarEnemy::FarEnemy(int x, int y) 
-  : Enemy("play/enemy-10.png", x, y, 20, 50, 200, 25) {
+  : Enemy("play/enemy-10.png", x, y, 20, 40, 270, 25) {
     // float radius, float speed, float hp, int money
     // damage = 80;
     detectRange = 1000.0f; // 偵測範圍
-    attackRange = 1500.0f; // 攻擊範圍
-    coolDown = 12.0f; // 攻擊冷卻時間
+    attackRange = 1200.0f; // 攻擊範圍
+    coolDown = 10.0f; // 攻擊冷卻時間
 
     // 設定 reload 為 5~20 秒的隨機值
     static std::mt19937 rng(static_cast<unsigned>(time(nullptr)));

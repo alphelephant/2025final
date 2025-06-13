@@ -12,7 +12,7 @@
 
 const int LaserSource::Price = 1000;
 LaserSource::LaserSource(float x, float y, float rotation) 
-  : Turret("play/tower-base.png", "play/turret-7.png", x, y, 600, Price, 2.0f, 100) {
+  : Turret("play/tower-base.png", "play/turret-7.png", x, y, 600, Price, 2.0f, 150) {
         //float radius, int price, float coolDown, float hp
     Anchor.y += 8.0f / GetBitmapHeight();
     Rotation = rotation;
