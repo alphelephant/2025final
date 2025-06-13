@@ -39,6 +39,11 @@ void SwordFighter::AttackEnemy(Enemy *enemy) {
 }
 void SwordFighter::Draw() const {
     std::shared_ptr<ALLEGRO_BITMAP> bmp = isAttacking ? attackBmp : runBmp;
+    if (!bmp) {
+        printf("SwordFighter::Draw: bmp is null\n");
+        // 如果沒有載入圖片，則不繪製
+        return;
+    }
     int   totalFrames   = isAttacking ? attackFrameCount : runFrameCount;
     float bmpW          = al_get_bitmap_width(bmp.get());
     float bmpH          = al_get_bitmap_height(bmp.get());
