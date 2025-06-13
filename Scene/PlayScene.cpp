@@ -47,7 +47,7 @@ const std::vector<Engine::Point> PlayScene::directions = { Engine::Point(-1, 0),
 const int PlayScene::MapWidth = 20, PlayScene::MapHeight = 13;
 const int PlayScene::BlockSize = 64;
 const float PlayScene::DangerTime = 7.61;
-const Engine::Point PlayScene::SpawnGridPoint = Engine::Point(-1, 0);
+const Engine::Point PlayScene::SpawnGridPoint = Engine::Point(0, 1);
 const Engine::Point PlayScene::EndGridPoint = Engine::Point(MapWidth - 1, MapHeight - 1);
 const std::vector<int> PlayScene::code = {
     ALLEGRO_KEY_UP, ALLEGRO_KEY_UP, ALLEGRO_KEY_DOWN, ALLEGRO_KEY_DOWN,
@@ -83,7 +83,7 @@ void PlayScene::Initialize() {
     ReadMap();
     ReadEnemyWave();
     mapDistance = CalculateBFSDistance();
-    FightDistance = CalculateDistance(EndGridPoint.x - 1, EndGridPoint.y - 1, SpawnGridPoint.x + 1, SpawnGridPoint.y);
+    FightDistance = CalculateDistance(EndGridPoint.x - 1, EndGridPoint.y - 1, SpawnGridPoint.x , SpawnGridPoint.y);
     ConstructUI();
     imgTarget = new Engine::Image("play/target.png", 0, 0);
     imgTarget->Visible = false;
@@ -491,7 +491,7 @@ void PlayScene::ReadMap() {
                 mapState[i][j] = TILE_FLOOR;
             }
             if (num==2)
-                TileMapGroup->AddNewObject(new Engine::Image("play/highground-1.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+                TileMapGroup->AddNewObject(new Engine::Image("play/upwall.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
             else if (num == 0){
                 static std::random_device rd;
                 static std::mt19937 gen(rd());
@@ -538,11 +538,27 @@ void PlayScene::ReadEnemyWave() {
     fin.close();
 }
 void PlayScene::ConstructUI() {
+    int h = Engine::GameEngine::GetInstance().GetScreenSize().y;
+    int w = Engine::GameEngine::GetInstance().GetScreenSize().x;
     // Background
-    UIGroup->AddNewObject(new Engine::Image("play/sand.png", 1280, 0, 320, 832));
+    UIGroup->AddNewObject(new Engine::Image("play/sand.png", 1280, 0, 320, h));
     UIGroup->AddNewObject(new Engine::Image("play/homebase.png", 1150 - 15, 700 + 15, 150, 150));
     UIGroup->AddNewObject(new Engine::Image("play/home.png", 1187 - 15, 643 + 15, 76, 152));
     //UIGroup->AddNewObject(new Engine::Image("play/LaserEyes.png", 1187 - 50 , 643 + 41, 140, 40));
+    //UIGroup->AddNewObject(new Engine::Image("play/Enemydoor-2.png", 0, 0, 32, 80));
+    //UIGroup->AddNewObject(new Engine::Image("play/Enemydoor-1.png", 0, 50, 32, 64));
+    for(int i = 0; i < h/16 ; i++){
+        static std::random_device rd;
+        static std::mt19937 gen(rd());
+        std::uniform_int_distribution<> dis(1, 4);
+        int dirtIdx = dis(gen);
+        std::string dirtImg = "play/SideWall-" + std::to_string(dirtIdx) + ".png";
+        UIGroup->AddNewObject(new Engine::Image(dirtImg, 0, i * 16, 8, 16));
+        UIGroup->AddNewObject(new Engine::Image(dirtImg, 1280 - 8, i * 16, 8, 16));
+    }
+    for(int i = 0; i < 10; i++){
+        UIGroup->AddNewObject(new Engine::Image("play/Downwall.png", i * 128, 832, 128, 64));
+    }
 
     // Text
     UIGroup->AddNewObject(new Engine::Label(std::string("Stage ") + std::to_string(MapId), "pirulen.ttf", 32, Sandpos + 14, 0));
@@ -584,8 +600,6 @@ void PlayScene::ConstructUI() {
     UIGroup->AddNewControlObject(TankfighterBtn);
     
     //Back Button
-    int w = Engine::GameEngine::GetInstance().GetScreenSize().x;
-    int h = Engine::GameEngine::GetInstance().GetScreenSize().y;
     int halfW = w / 2;
     int halfH = h / 2;
     Engine::ImageButton *btnn;
@@ -671,7 +685,7 @@ bool PlayScene::CheckSpaceValid(int x, int y) {
     mapState[y][x] = TILE_OCCUPIED;
     std::vector<std::vector<int>> map = CalculateBFSDistance();
     mapState[y][x] = map00;
-    if (map[0][0] == -1)
+    if (map[SpawnGridPoint.y][SpawnGridPoint.x] == -1)
         return false;
     for (auto &it : EnemyGroup->GetObjects()) {
         Engine::Point pnt;
@@ -690,7 +704,7 @@ bool PlayScene::CheckSpaceValid(int x, int y) {
     for (auto &it : EnemyGroup->GetObjects())
         dynamic_cast<Enemy *>(it)->UpdatePath(mapDistance);
 
-    FightDistance = CalculateDistance(EndGridPoint.x - 1, EndGridPoint.y - 1, SpawnGridPoint.x + 1, SpawnGridPoint.y);
+    FightDistance = CalculateDistance(EndGridPoint.x - 1, EndGridPoint.y - 1, SpawnGridPoint.x , SpawnGridPoint.y);
     for (auto &it : FighterGroup->GetObjects()){
         dynamic_cast<Fighter *>(it)->UpdatePath(FightDistance, 0, 0);
     }
