@@ -12,7 +12,7 @@
 class Turret;
 
 LaserBullet::LaserBullet(Engine::Point position, Engine::Point forwardDirection, float rotation, Turret *parent) 
-  : Bullet("play/bullet-2.png", 800, 15, position, forwardDirection, rotation - ALLEGRO_PI / 2, parent) {
+  : Bullet("play/bullet-2.png", 800, 20, position, forwardDirection, rotation - ALLEGRO_PI / 2, parent) {
     //speed, damage
 }
 void LaserBullet::OnExplode(Enemy *enemy) {

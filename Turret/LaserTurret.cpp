@@ -9,7 +9,7 @@
 #include "LaserTurret.hpp"
 #include "Scene/PlayScene.hpp"
 
-const int LaserTurret::Price = 400;
+const int LaserTurret::Price = 360;
 LaserTurret::LaserTurret(float x, float y) 
   : Turret("play/tower-base.png", "play/turret-2.png", x, y, 400, Price, 0.3, 200) {
         //float radius, int price, float coolDown, float hp
