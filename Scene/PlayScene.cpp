@@ -430,6 +430,8 @@ void PlayScene::OnKeyDown(int keyCode) {
         UIBtnClicked(2);
     }else if (keyCode == ALLEGRO_KEY_R) {
         UIBtnClicked(4);
+    }else if (keyCode == ALLEGRO_KEY_T) {
+        UIBtnClicked(5);
     }
     else if (keyCode >= ALLEGRO_KEY_0 && keyCode <= ALLEGRO_KEY_9) {
         // Hotkey for Speed up.

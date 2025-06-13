@@ -44,7 +44,13 @@ Fighter::Fighter(std::string img, float x, float y, float radius, float speed, f
 void Fighter::Hit(float damage) {
     hp -= damage;
     if (hp <= 0) {
-        //OnExplode();
+        // 解除自己在 Enemy 的鎖定
+        if (TargetEnemy && lockedFighterIterator != std::list<Fighter*>::iterator()) {
+            TargetEnemy->lockedFighters.erase(lockedFighterIterator);
+            lockedFighterIterator = std::list<Fighter*>::iterator();
+            TargetEnemy = nullptr;
+        }
+        // ...原本的解除 lockedEnemy...
         // Remove all turret's reference to target.
         for (auto &it : lockedEnemy)
             it = nullptr;
