@@ -1,22 +1,24 @@
-#include <string>
 #include <allegro5/base.h>
 #include <cmath>
 #include <string>
 
-#include "EnemyBullet/EnemyFireBullet.hpp"
+#include "EnemyBullet/EnemyMissileBullet.hpp"
 #include "Engine/AudioHelper.hpp"
 #include "Engine/Group.hpp"
 #include "Engine/Point.hpp"
-#include "FarEnemy.hpp"
 #include "Scene/PlayScene.hpp"
 
 #include "FarEnemy.hpp"
 
 // TODO HACKATHON-3 (1/3): You can imitate the 2 files: 'SoldierEnemy.hpp', 'SoldierEnemy.cpp' to create a new enemy.
 FarEnemy::FarEnemy(int x, int y) 
-    : Enemy("play/enemy-10.png", x, y, 10, 100, 35, 25) {
-    Anchor.y += 8.0f / GetBitmapHeight();
-    maxHp = hp; // 設定最大生命值
+    : Enemy("play/enemy-10.png", x, y, 10, 20, 200, 25) {
+    // 設定 bulletCoolDown 為 5~20 秒的隨機值
+    static std::mt19937 rng(static_cast<unsigned>(time(nullptr)));
+    std::uniform_real_distribution<float> dist(0.0f, 20.0f);
+    bulletCoolDown = dist(rng);
+        Anchor.y += 8.0f / GetBitmapHeight();
+        maxHp = hp; // 設定最大生命值
 } //float radius, float speed, float hp, int money
 void FarEnemy::Update(float deltaTime) {
     Enemy::Update(deltaTime); // 保留原本移動等邏輯
@@ -67,30 +69,17 @@ void FarEnemy::Update(float deltaTime) {
                 rotation = ((abs(radian) - maxRotateRadian) * originRotation + maxRotateRadian * targetRotation) / radian;
             // Add 90 degrees (PI/2 radian), since we assume the image is oriented upward.
             Rotation = atan2(rotation.y, rotation.x) + ALLEGRO_PI / 2;
-            //}    
+        //}
+
+        // 更新子彈冷卻計時器
         bulletCoolDown -= deltaTime;
         if (bulletCoolDown <= 0) {
             CreateBullet();
-            bulletCoolDown = 1.5f; // 1.5秒發射一次，可依需求調整
+            bulletCoolDown = 12.0f; // 12.0秒發射一次，可依需求調整
         }
     }
-    // 更新子彈冷卻計時器
-
 }
 void FarEnemy::CreateBullet() {
-    /*if (!TargetTurret) {
-        float minDistance = 1e9;
-        for (auto &it : getPlayScene()->TowerGroup->GetObjects()) {
-            Turret* turret = dynamic_cast<Turret*>(it);
-            if (!turret || !turret->Visible) continue; 
-            
-            float distance = (turret->Position - Position).Magnitude();
-            if (distance < minDistance) {
-                minDistance = distance;
-                TargetTurret = turret;
-            }
-        }
-    }*/
     Engine::Point diff;
     if (TargetTurret) {
         diff = TargetTurret->Position - Position;
@@ -103,8 +92,8 @@ void FarEnemy::CreateBullet() {
     
     // Change bullet position to the front of the gun barrel.
     Engine::Point spawnPos = Position + normalized * 36;
-    getPlayScene()->EnemyBulletGroup->AddNewObject(new EnemyFireBullet(spawnPos, normalized, rotation, this));
-    AudioHelper::PlayAudio("gun.wav");
+    getPlayScene()->EnemyBulletGroup->AddNewObject(new EnemyMissileBullet(spawnPos, normalized, rotation, this));
+    AudioHelper::PlayAudio("missile.wav");
 }
 void FarEnemy::OnExplode() {
     if (TargetTurret) {
