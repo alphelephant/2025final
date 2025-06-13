@@ -19,6 +19,7 @@ public:
     SwordFighter(float x, float y);
     void Update(float deltaTime) override;
     void Draw() const override;
+    void AttackEnemy(Enemy *enemy) override ;
     static const int Price = 250;
 };
 

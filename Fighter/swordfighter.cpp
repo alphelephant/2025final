@@ -3,6 +3,7 @@
 #include <cmath>
 #include <allegro5/color.h>
 #include "Swordfighter.hpp"
+#include "Engine/AudioHelper.hpp"
 #include "Engine/Resources.hpp"
 #include "UI/Component/Image.hpp"
 
@@ -31,6 +32,11 @@ void SwordFighter::Update(float deltaTime) {
     // 迴圈播放
     float cycle = (isAttacking ? attackFrameCount : runFrameCount) * frameDuration;
     if (animTimer >= cycle) animTimer -= cycle;
+}
+void SwordFighter::AttackEnemy(Enemy *enemy) {
+    Fighter::AttackEnemy(enemy);
+    AudioHelper::PlayAudio("sword.wav");
+
 }
 void SwordFighter::Draw() const {
     std::shared_ptr<ALLEGRO_BITMAP> bmp = isAttacking ? attackBmp : runBmp;

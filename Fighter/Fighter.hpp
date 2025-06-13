@@ -40,7 +40,7 @@ public:
     void Hit(float damage);
     void UpdatePath(const std::vector<std::vector<int>> &mapDistance, int endx, int endy);
     void Update(float deltaTime) override;
-    void AttackEnemy(Enemy *enemy);
+    virtual void AttackEnemy(Enemy *enemy);
     void AttackBase();
     void Draw() const override;
     void ApproachTarget(float deltaTime);
