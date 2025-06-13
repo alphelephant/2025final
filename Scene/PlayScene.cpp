@@ -471,6 +471,9 @@ void PlayScene::ReadMap() {
             case '1': mapData.push_back(1); break;
             case '2': mapData.push_back(2); break;
             case '3': mapData.push_back(3); break;
+            case '4': mapData.push_back(4); break;
+            case '5': mapData.push_back(5); break;
+            case '6': mapData.push_back(6); break;
             case '\n':
             case '\r':
                 if (static_cast<int>(mapData.size()) / MapWidth != 0)
@@ -491,7 +494,7 @@ void PlayScene::ReadMap() {
             //mapState[i][j] = num ? TILE_FLOOR : TILE_DIRT;
             if(num == 0 || num == 3){
                 mapState[i][j] = TILE_DIRT;
-            }else if(num == 2 ){
+            }else if(num == 2  || num == 4 ){
                 mapState[i][j] = TILE_OCCUPIED;
             }
             else if(num == 1){
@@ -536,6 +539,22 @@ void PlayScene::ReadMap() {
                 int imgH = al_get_bitmap_height(bmp);
                 TileMapGroup->AddNewObject(new Engine::Image("play/high3.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize*imgH/imgW));
                 //TileMapGroup->AddNewObject(new Engine::Image("play/highground-2.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+            }
+            else if(num == 4){
+                static std::random_device rd;
+                static std::mt19937 gen(rd());
+                std::uniform_int_distribution<> dis(1, 4);
+                int dirtIdx = dis(gen);
+                std::string dirtImg = "play/dirt-" + std::to_string(dirtIdx) + ".png";
+                TileMapGroup->AddNewObject(new Engine::Image(dirtImg, j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+                TileMapGroup->AddNewObject(new Engine::Image("play/Hole.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+                std::uniform_int_distribution<> ds(1, 10);
+                int stoneIdx = ds(gen);
+                if(stoneIdx == 4 || stoneIdx == 5){
+                    std::string stoneImg = "play/stone-" + std::to_string(stoneIdx) + ".png";
+                    TileMapGroup->AddNewObject(new Engine::Image(stoneImg, j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+                }
+
             }
             
         }
