@@ -48,7 +48,7 @@ void TankEnemy::CreateBullet() {
     // 以目前頭部方向發射
     float basedir = head.Rotation;
     static std::mt19937 rng(static_cast<unsigned>(time(nullptr)));
-    std::uniform_int_distribution<int> dist(1, 3);
+    std::uniform_int_distribution<int> dist(1, 5);
     int x = dist(rng);
     for(int i = -1*x + 1; i < x; i++){
         Engine::Point forward = Engine::Point(cos(basedir + i*ALLEGRO_PI/14), sin(basedir + i*ALLEGRO_PI/14));
