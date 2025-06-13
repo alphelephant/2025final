@@ -15,7 +15,7 @@ SwordFighter::SwordFighter(float x, float y) : Fighter("play/Swordman.png", x, y
     {
     damage = 50;
     runBmp = Engine::Resources::GetInstance().GetBitmap("play/RUN.png");
-    attackBmp = Engine::Resources::GetInstance().GetBitmap("play/ATTACK 1.png");
+    attackBmp = Engine::Resources::GetInstance().GetBitmap("play/ATTACK1.png");
     Anchor.x = 0.5f; // 設定錨點為圖片中心
     Anchor.y = 0.5f; // 設定錨點為圖片中心
     isSwordFighter = true;

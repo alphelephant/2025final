@@ -158,7 +158,6 @@ void Fighter::AttackEnemy(Enemy *enemy) {
         if(!isSwordFighter)
             getPlayScene()->EffectGroup->AddNewObject(new ShockwaveEffect(Position.x, Position.y, damageRange));
         enemy->Hit(damage); // Assuming each fighter does 10 damage.
-        AudioHelper::PlayAudio("NeverGonnaGiveYouUp.wav");
     }
 }
 void Fighter::Draw() const {
