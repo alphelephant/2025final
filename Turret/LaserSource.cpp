@@ -33,7 +33,7 @@ void LaserSource::CreateBullet() {
     Engine::Point normalized = diff.Normalize();
     Engine::Point normal = Engine::Point(-normalized.y, normalized.x);
     // Change bullet position to the front of the gun barrel.
-    getPlayScene()->BulletGroup->AddNewObject(new Beam(Position + normalized * 230, diff, rotation, this));
+    getPlayScene()->BulletGroup->AddNewObject(new Beam(Position + normalized * 250, diff, rotation, this));
     //getPlayScene()->BulletGroup->AddNewObject(new Beam(Position + normalized * 36 + normal * 6, diff, rotation, this));
     AudioHelper::PlayAudio("laser.wav");
 }

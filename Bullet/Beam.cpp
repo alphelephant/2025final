@@ -20,7 +20,7 @@ static float getdistance(const Engine::Point &p,const Engine::Point &v,const Eng
     return (p - proj).Magnitude();
 }
 Beam::Beam(Engine::Point position, Engine::Point forwardDirection, float rotation, Turret *parent) 
-  : Bullet("play/laserbeam.png", 0.1, 200, position, forwardDirection, rotation - ALLEGRO_PI / 2, parent) {
+  : Bullet("play/laserbeam-1.png", 0.1, 200, position, forwardDirection, rotation - ALLEGRO_PI / 2, parent) {
         //speed, damage
     hitCount = 0;
 }
@@ -32,6 +32,12 @@ void Beam::OnExplode(Enemy *enemy) {
 }
 void Beam::Update(float deltaTime) {
     Sprite::Update(deltaTime);
+
+    animTimer += deltaTime;
+    if (animTimer >= FRAME_DURATION) {
+        animTimer -= FRAME_DURATION;
+        animFrame = (animFrame + 1) % FRAME_COUNT;
+    }
     PlayScene *scene = getPlayScene();
     
     static float lifeTime = 0;
@@ -65,5 +71,28 @@ void Beam::Update(float deltaTime) {
             return;
         }
     }
+
+}
+void Beam::Draw() const {
+    int bmpW      = GetBitmapWidth();
+    int bmpH      = GetBitmapHeight();
+    int frameW    = bmpW / FRAME_COUNT;
+    int frameH    = bmpH;
+
+    // 計算 region 左上角 x 座標
+    int srcX = animFrame * frameW;
+
+    al_draw_tinted_scaled_rotated_bitmap_region(
+        bmp.get(),
+        srcX, 0,                 // region 左上
+        frameW, frameH,         // region 尺寸
+        al_map_rgba(255,255,255,255),
+        frameW/2.0f, frameH/2.0f,  // 繪製時的原點（置中）
+        Position.x, Position.y,    // 畫到場景的座標
+        1,            // x 方向等比縮放
+        1,            // y 方向等比縮放
+        Rotation,
+        0
+    );
 
 }
