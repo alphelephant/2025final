@@ -8,6 +8,7 @@
 #include "Engine/Point.hpp"
 #include "Engine/Sprite.hpp"
 #include "Scene/PlayScene.hpp"
+#include "Fighter/Fighter.hpp"
 
 PlayScene *EnemyBullet::getPlayScene() {
     return dynamic_cast<PlayScene *>(Engine::GameEngine::GetInstance().GetActiveScene());
@@ -32,6 +33,17 @@ void EnemyBullet::Update(float deltaTime) {
         if (Engine::Collider::IsCircleOverlap(Position, CollisionRadius, turret->Position, turret->Bodyrange)) {
             OnExplode(turret);
             turret->Hit(damage);
+            getPlayScene()->BulletGroup->RemoveObject(objectIterator);
+            return;
+        }
+    }
+    for (auto &it : scene->FighterGroup->GetObjects()) {
+        Fighter *fighter = dynamic_cast<Fighter *>(it);
+        if (!fighter || !fighter->Visible)
+            continue;
+        if (Engine::Collider::IsCircleOverlap(Position, CollisionRadius, fighter->Position, fighter->CollisionRadius)) {
+            //OnExplode(fighter);
+            fighter->Hit(damage);
             getPlayScene()->BulletGroup->RemoveObject(objectIterator);
             return;
         }

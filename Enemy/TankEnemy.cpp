@@ -16,7 +16,7 @@ TankEnemy::TankEnemy(int x, int y)
     //float radius, float speed, float hp, int money
   head("play/enemy-3-head.png", x, y), targetRotation(0) {
     //damage = 12; // 子彈傷害
-    coolDown = 6.0f; // 攻擊冷卻時間
+    coolDown = 4.0f; // 攻擊冷卻時間
 
     static std::mt19937 rng(static_cast<unsigned>(time(nullptr)));
     std::uniform_real_distribution<float> dist(0.0f, 12.0f);
@@ -32,7 +32,7 @@ void TankEnemy::Update(float deltaTime) {
     // Choose arbitrary one.
     std::random_device dev;
     std::mt19937 rng(dev());
-    std::uniform_real_distribution<> dist(0.0f, 0.7f);
+    std::uniform_real_distribution<> dist(0.0f, 0.5f);
     float rnd = dist(rng);
     if (rnd < deltaTime) {
         // Head arbitrary rotation.
@@ -51,7 +51,7 @@ void TankEnemy::CreateBullet() {
     // 以目前頭部方向發射
     float basedir = head.Rotation;
     static std::mt19937 rng(static_cast<unsigned>(time(nullptr)));
-    std::uniform_int_distribution<int> dist(1, 5);
+    std::uniform_int_distribution<int> dist(1,  7);
     int x = dist(rng);
     for(int i = -1*x + 1; i < x; i++){
         Engine::Point forward = Engine::Point(cos(basedir + i*ALLEGRO_PI/14), sin(basedir + i*ALLEGRO_PI/14));
