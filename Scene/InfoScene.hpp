@@ -21,10 +21,9 @@ private:
     std::vector<InfoItem> turretItems;
     std::vector<Engine::ImageButton*> currentItemButtons;
     Engine::Label* descLabel = nullptr;
-    Engine::Label* hpLabel = nullptr;
+    /*Engine::Label* hpLabel = nullptr;
     Engine::Label* damageLabel = nullptr;
-    Engine::Label* speedLabel = nullptr;
-    Engine::Label* titleLabel = nullptr;
+    Engine::Label* speedLabel = nullptr;*/
     int selectedType = 0; // 0: enemy, 1: turret
 
 public:

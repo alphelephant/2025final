@@ -40,14 +40,14 @@ void InfoScene::Initialize() {
     AddNewObject(new Engine::Image("stage-select/floor.png", infoBoxX, infoBoxY, infoBoxW, infoBoxH, 0, 0));
     
     // 中間介紹文字
-    descLabel = new Engine::Label("Click The Image", "pirulen.ttf", 36, w/2, infoBoxY + 50, 0, 0, 0, 255, 0.5, 0);
+    descLabel = new Engine::Label("Click The Image", "pirulen.ttf", 36, w/2, infoBoxY + 30, 0, 0, 0, 255, 0.5, 0);
     AddNewObject(descLabel);
-    hpLabel = new Engine::Label("", "pirulen.ttf", 36, w/2, infoBoxY + 100, 0, 0, 0, 255, 0.5, 0);
+    /*hpLabel = new Engine::Label("", "pirulen.ttf", 36, w/2, infoBoxY + 100, 0, 0, 0, 255, 0.5, 0);
     AddNewObject(hpLabel);
     damageLabel = new Engine::Label("", "pirulen.ttf", 36, w/2, infoBoxY + 150, 0, 0, 0, 255, 0.5, 0);
     speedLabel = new Engine::Label("", "pirulen.ttf", 36, w/2, infoBoxY + 200, 0, 0, 0, 255, 0.5, 0);
     AddNewObject(damageLabel);
-    AddNewObject(speedLabel);
+    AddNewObject(speedLabel);*/
 
     // 返回按鈕
     auto backBtn = new Engine::ImageButton("stage-select/dirt.png", "stage-select/floor.png", w - 250, h - 120, 200, 80);
