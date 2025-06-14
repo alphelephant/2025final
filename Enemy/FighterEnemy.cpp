@@ -7,11 +7,11 @@
 #include "UI/Animation/ExplosionEffect.hpp"
 
 FighterEnemy::FighterEnemy(int x, int y)
-  : Enemy("play/enemy-7.png", x, y, 20, 150, 210, 25) {
+  : Enemy("play/enemy-7.png", x, y, 20, 150, 220, 25) {
     // float radius, float speed, float hp, int money
-    damage = 20; // 設定傷害
+    damage = 25; // 設定傷害
     detectRange = 120; // 偵測範圍
-    attackRange = 120; // 攻擊範圍
+    attackRange = 130; // 攻擊範圍
     coolDown = 0.5f; // 攻擊冷卻時間
     isFighterEnemy = true; // 設定為 FighterEnemy
 }
