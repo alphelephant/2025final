@@ -333,16 +333,20 @@ void PlayScene::OnMouseUp(int button, int mx, int my) {
     IScene::OnMouseUp(button, mx, my);
     if ((button & 1)&&shovelMode && selectedTurret) {
         // 移除塔並返還金錢
-        mapState[y][x] = TILE_FLOOR;  // 恢復地面狀態
+ // 恢復地面狀態
         EarnMoney(selectedTurret->GetPrice()/3);  // 返還金額
-        for (auto &obj : BulletGroup->GetObjects()) {
+        /*for (auto &obj : BulletGroup->GetObjects()) {
             auto beam = dynamic_cast<Beam*>(obj);
             if (beam && beam->GetParent() == selectedTurret ) {
                 BulletGroup->RemoveObject(beam->GetObjectIterator());
             }
         }
-        TowerGroup->RemoveObject(selectedTurret->GetObjectIterator());
-        selectedTurret = nullptr;  // 清空選中的塔
+        TowerGroup->RemoveObject(selectedTurret->GetObjectIterator());*/
+        selectedTurret->Hit(10000);  // 清空選中的塔
+        /*if(mapData[y * PlayScene::MapWidth + x] == 1)
+            mapState[y][x] = PlayScene::TileType::TILE_FLOOR;
+        else
+            mapState[y][x] = PlayScene::TileType::TILE_DIRT;*/
         SetShovelMode(false);  // 退出 Shovel 模式
     }
 
@@ -473,10 +477,11 @@ void PlayScene::EarnMoney(int money) {
     UIMoney->Text = std::string("$") + std::to_string(this->money);
 }
 void PlayScene::ReadMap() {
+    mapData.clear();
     std::string filename = std::string("Resource/map") + std::to_string(MapId) + ".txt";
     // Read map file.
     char c;
-    std::vector<int> mapData;
+    //std::vector<int> mapData;
     std::ifstream fin(filename);
     while (fin >> c) {
         switch (c) {
@@ -777,7 +782,7 @@ bool PlayScene::CheckSpaceValid(int x, int y) {
 
     FightDistance = CalculateDistance(EndGridPoint.x - 1, EndGridPoint.y - 1, SpawnGridPoint.x , SpawnGridPoint.y);
     for (auto &it : FighterGroup->GetObjects()){
-        dynamic_cast<Fighter *>(it)->UpdatePath(FightDistance, 0, 0);
+        dynamic_cast<Fighter *>(it)->UpdatePath(FightDistance,SpawnGridPoint.x , SpawnGridPoint.y);
     }
     return true;
 }

@@ -80,6 +80,7 @@ public:
     Engine::Sprite *dangerIndicator;
     Turret *preview;
     std::vector<std::vector<TileType>> mapState;
+    std::vector<int> mapData;
     std::vector<std::vector<int>> mapDistance;
     std::vector<std::vector<int>> FightDistance;
     std::list<std::pair<int, float>> enemyWaveData;

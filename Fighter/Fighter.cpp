@@ -38,7 +38,7 @@ Fighter::Fighter(std::string img, float x, float y, float radius, float speed, f
     maxHp = hp; // 設定最大生命值
     TargetEnemy = nullptr;
     PlayScene* scene = getPlayScene();
-    FindPath = scene->FightDistance;
+    //FindPath = scene->FightDistance;
     lastGrid = Engine::Point(x, y);
 }
 void Fighter::Hit(float damage) {
@@ -79,9 +79,14 @@ void Fighter::UpdatePath(const std::vector<std::vector<int>> &FighterDistance, i
         for (auto &dir : PlayScene::directions) {
             int x = pos.x + dir.x;
             int y = pos.y + dir.y;
-            if (x < 0 || x >= PlayScene::MapWidth || y < 0 || y >= PlayScene::MapHeight || FindPath[y][x] != num - 1||  getPlayScene()->mapState[y][x]!=PlayScene::TileType::TILE_DIRT)
+            if (x < 0 || x >= PlayScene::MapWidth || y < 0 || y >= PlayScene::MapHeight || FighterDistance[y][x] != num - 1||  getPlayScene()->mapState[y][x]!=PlayScene::TileType::TILE_DIRT)
                 continue;
             nextHops.emplace_back(x, y);
+        }
+        if (nextHops.empty()) {
+            Engine::LOG(Engine::ERROR) << "No valid path for Fighter!";
+            path.clear(); // 或者 return;
+            return;
         }
         std::random_device dev;
         std::mt19937 rng(dev());

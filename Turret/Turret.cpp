@@ -38,7 +38,10 @@ void Turret::Hit(float damage) {
         int tx = static_cast<int>(this->Position.x) / 64;
         int ty = static_cast<int>(this->Position.y) / 64;
         scene->TowerGroup->RemoveObject(GetObjectIterator());
-        scene->mapState[ty][tx] = PlayScene::TileType::TILE_FLOOR;
+        if(scene->mapData[ty * PlayScene::MapWidth + tx] == 1)
+            scene->mapState[ty][tx] = PlayScene::TileType::TILE_FLOOR;
+        else
+            scene->mapState[ty][tx] = PlayScene::TileType::TILE_DIRT;
     }
 }
 void Turret::Update(float deltaTime) {
