@@ -9,7 +9,7 @@
 
 // TODO HACKATHON-3 (1/3): You can imitate the 2 files: 'SoldierEnemy.hpp', 'SoldierEnemy.cpp' to create a new enemy.
 SwordFighter::SwordFighter(float x, float y) : Fighter("play/Swordman.png", x, y,
-    /*detactradian*/25, /*speed*/100, /*hp*/ 100,
+    /*detactradian*/25, /*speed*/100, /*hp*/ 120,
     /*attack range*/ 140 ,/*damageRange*/150, /*attackspeed*/ 0.35f),runFrameCount(16),attackFrameCount(7)    
     {
     damage = 60;

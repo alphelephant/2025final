@@ -15,7 +15,7 @@ TankEnemy::TankEnemy(int x, int y)
   : Enemy("play/enemy-3.png", x, y, 20, 60, 600, 50),
     //float radius, float speed, float hp, int money
   head("play/enemy-3-head.png", x, y), targetRotation(0) {
-    //damage = 12; // 子彈傷害
+    //damage = 10; // 子彈傷害
     coolDown = 4.0f; // 攻擊冷卻時間
 
     static std::mt19937 rng(static_cast<unsigned>(time(nullptr)));

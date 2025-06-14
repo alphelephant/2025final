@@ -12,7 +12,7 @@
 
 // TODO HACKATHON-3 (1/3): You can imitate the 2 files: 'SoldierEnemy.hpp', 'SoldierEnemy.cpp' to create a new enemy.
 FarEnemy::FarEnemy(int x, int y) 
-  : Enemy("play/enemy-10.png", x, y, 20, 40, 270, 25) {
+  : Enemy("play/enemy-10.png", x, y, 20, 40, 200, 25) {
     // float radius, float speed, float hp, int money
     // damage = 80;
     detectRange = 1000.0f; // 偵測範圍
