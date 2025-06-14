@@ -72,6 +72,7 @@ public:
     Group *UIGroup;
     Group *FighterGroup;
     Group *EnemyBulletGroup;
+    Group *MissileGroup;
     
     Engine::Label *UIMoney;
     Engine::Label *UILives;

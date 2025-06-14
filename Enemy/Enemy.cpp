@@ -17,6 +17,7 @@
 #include "Fighter/Fighter.hpp"
 #include "UI/Animation/DirtyEffect.hpp"
 #include "UI/Animation/ExplosionEffect.hpp"
+#include "Missile/Missile.hpp"
 
 PlayScene *Enemy::getPlayScene() {
     return dynamic_cast<PlayScene *>(Engine::GameEngine::GetInstance().GetActiveScene());
@@ -56,6 +57,8 @@ void Enemy::Hit(float damage) {
         for (auto &it : lockedTurrets)
             it->Target = nullptr;
         for (auto &it : lockedBullets)
+            it->Target = nullptr;
+        for (auto &it : lockedMissiles)
             it->Target = nullptr;
         getPlayScene()->EarnMoney(money);
         getPlayScene()->EnemyGroup->RemoveObject(objectIterator);

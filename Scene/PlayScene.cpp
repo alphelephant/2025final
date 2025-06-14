@@ -36,6 +36,7 @@
 #include "Fighter/Fighter.hpp"
 #include "Fighter/TankFighter.hpp"
 #include "Fighter/Swordfighter.hpp"
+#include "Missile/Missile.hpp"
 
 // TODO HACKATHON-4 (1/3): Trace how the game handles keyboard input.
 // TODO HACKATHON-4 (2/3): Find the cheat code sequence in this file.
@@ -79,6 +80,7 @@ void PlayScene::Initialize() {
     AddNewObject(EffectGroup = new Group());
     AddNewObject(FighterGroup = new Group());
     AddNewObject(EnemyBulletGroup = new Group());
+    AddNewObject(MissileGroup = new Group());
     // Should support buttons.
     AddNewControlObject(UIGroup = new Group());
     ReadMap();
@@ -415,6 +417,7 @@ void PlayScene::OnKeyDown(int keyCode) {
             EffectGroup->AddNewObject(new Plane());
             Engine::LOG(Engine::INFO) << "Plane spawned" ;
             EarnMoney(10000);
+
         }
 
     }
@@ -439,6 +442,15 @@ void PlayScene::OnKeyDown(int keyCode) {
     }
 }
 void PlayScene::Hit() {
+    Engine::Point start = Engine::Point(
+        (EndGridPoint.x - 1)* BlockSize + BlockSize/2,
+        (EndGridPoint.y - 1) * BlockSize + BlockSize/2
+    );
+    for(int i = 0; i < 5; i++){
+        Missile* missile = new Missile("play/Bullet-4.png", 600, 600, start, 0);
+        missile->Visible = true;
+        MissileGroup->AddNewObject(missile);
+    }     
     lives--;
     laserEyesTimer = 0.5f;
     UILives->Text = std::string("Life ") + std::to_string(lives);
