@@ -1,12 +1,18 @@
-Here’s an example README.md file:	
 ## Features
 - [Easy]
-- Local account system
+- Random Map
+- Game Art
+- Laser Beam Turret 
+- Animation
+- Information Scene
+- Suicide Enemy
+- Enemy Home
 - …
 - [Hard]
-- Procedural generated level
-- Map editor
+- Fighter Enemy
+- Fighter
+- Missile
 - …
 ## Individual Contribution
-113062XXX 王小明 (30%): Local account system
-113062XXX 陳小美 (70%): Procedural generated level, Map editor
+113062238 李昀謙 (?%): Information Scene
+113062141 朱奕昕 (?%): Fighter、Missile、Game Art、Random Map、Animation、Suicide Enemy、Enemy Home
