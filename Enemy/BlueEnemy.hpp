@@ -5,7 +5,7 @@
 class BlueEnemy : public Enemy {
 private:
     float reload = 0;
-    void Destruct();
+    void Attack();
     void OnExplode() override;
 public:
     BlueEnemy(float x, float y);

@@ -29,7 +29,7 @@ void BlueEnemy::OnExplode(){
         getPlayScene()->GroundEffectGroup->AddNewObject(new DirtyEffect("play/dirty-" + std::to_string(distId(rng)) + ".png", dist(rng), Position.x, Position.y));
     }
 }
-void BlueEnemy::Destruct() {
+void BlueEnemy::Attack() {
     auto scene = getPlayScene();
     //  效果：爆炸動畫與特效
     getPlayScene()->EffectGroup->AddNewObject(new ShockwaveEffect(Position.x, Position.y, attackRange));
@@ -60,7 +60,7 @@ void BlueEnemy::Update(float deltaTime) {
         float dist = (turret->Position - Position).Magnitude();
         if (dist <= detectRange && reload <= 0) {
             reload = coolDown; // 重置冷卻時間
-            Destruct();
+            Attack();
         }
     }
 }

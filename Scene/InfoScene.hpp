@@ -12,7 +12,10 @@ private:
     struct InfoItem {
         std::string imagePath;
         std::string name;
-        std::string description;
+        int hp;
+        int damage;
+        int dps;
+        int speed_range;
     };
     std::vector<InfoItem> enemyItems;
     std::vector<InfoItem> turretItems;

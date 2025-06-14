@@ -7,23 +7,22 @@
 #include "Enemy/Enemy.hpp"
 
 void InfoScene::Initialize() {
-    // 填入敵人資料
+    //hp,damage,dps,speed_range
     enemyItems = {
-        {"play/enemy-1.png", "Soldier", "a"},
-        {"play/enemy-2.png", "Hawk-X", "b"},
-        {"play/enemy-3.png", "Guardian", "c"},
-        {"play/enemy-6.png", "Boomer", "d"},
-        {"play/enemy-9.png", "Pulsefiend", "e"},
-        {"play/enemy-10.png", "Sniper", "f"},
-        {"play/enemy-7.png", "Destroyer", "g"}
+        {"play/enemy-1.png", "Soldier",10,0,0,100},
+        {"play/enemy-2.png", "Hawk-X",25,0,0,300},
+        {"play/enemy-3.png", "Guardian",600,12,10,60},
+        {"play/enemy-6.png", "Boomer",20,9999,0,500},
+        {"play/enemy-9.png", "Pulsefiend",100,5,17,200},
+        {"play/enemy-10.png", "Sniper",270,80,8,40},
+        {"play/enemy-7.png", "Destroyer",210,20,40,150}
     };
-    // 填入砲台資料
     turretItems = {
-        {"play/turret-1.png", "Gun", "1"},
-        {"play/turret-2.png", "Cannon", "2"},
-        {"play/turret-7.png", "Laser", "3"},
-        {"play/enemy-4.png", "Fighter", "4"},
-        
+        {"play/turret-1.png", "Gun",250,5,10,200},
+        {"play/turret-2.png", "Cannon",200,20,133,400},
+        {"play/turret-7.png", "Laser",150,200,100,600},
+        {"play/enemy-4.png", "Fighter",200,200,100,150},
+        {"play/Swordman.png", "Swordmaster",280,60,150,110}
     };
 
     int w = Engine::GameEngine::GetInstance().GetScreenSize().x;
@@ -102,7 +101,11 @@ void InfoScene::ShowTurret() {
 
 void InfoScene::OnEnemyClick(int idx) {
     if (descLabel && idx < enemyItems.size()) {
-        descLabel->Text = enemyItems[idx].name + " " + enemyItems[idx].description;
+        descLabel->Text = enemyItems[idx].name + "\n\nhp=" 
+        + std::to_string(enemyItems[idx].hp) + "\nattack="
+        + std::to_string(enemyItems[idx].damage) + "\ndps="
+        + std::to_string(enemyItems[idx].dps) + "\nspeed="
+        + std::to_string(enemyItems[idx].speed_range);
     }
     /*if (hpLabel && idx < enemyItems.size()) {
         hpLabel->Text = "HP: " + std::to_string(enemyItems[idx].hp);
@@ -117,7 +120,11 @@ void InfoScene::OnEnemyClick(int idx) {
 
 void InfoScene::OnTurretClick(int idx) {
     if (descLabel && idx < turretItems.size()) {
-        descLabel->Text = turretItems[idx].name + " " + turretItems[idx].description;
+        descLabel->Text = turretItems[idx].name + "\n\nhp="
+        + std::to_string(turretItems[idx].hp) + "\nattack="
+        + std::to_string(turretItems[idx].damage) + "\ndps="
+        + std::to_string(turretItems[idx].dps) + "\nrange="
+        + std::to_string(turretItems[idx].speed_range);
     }
 }
 
