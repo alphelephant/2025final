@@ -450,7 +450,7 @@ void PlayScene::Hit() {
         (EndGridPoint.x - 1)* BlockSize + BlockSize/2,
         (EndGridPoint.y - 1) * BlockSize + BlockSize/2
     );
-    for(int i = 0; i < 5; i++){
+    for(int i = 0; i < 3; i++){
         Missile* missile = new Missile("play/Bullet-4.png", 600, 600, start, 0);
         missile->Visible = true;
         MissileGroup->AddNewObject(missile);
@@ -626,57 +626,61 @@ void PlayScene::ConstructUI() {
     TurretButton *btn;
     // Button 1
     btn = new TurretButton("play/floor.png", "play/dirt.png",
-                           Engine::Sprite("play/tower-base.png", Sandpos + 14, 136, 0, 0, 0, 0),
-                           Engine::Sprite("play/turret-1.png", Sandpos + 14, 136 - 8, 0, 0, 0, 0), Sandpos + 14, 136, MachineGunTurret::Price);
+            Engine::Sprite("play/tower-base.png", Sandpos + 14, 136, 0, 0, 0, 0),
+            Engine::Sprite("play/turret-1.png", Sandpos + 14, 136 - 8, 0, 0, 0, 0), Sandpos + 14, 136, MachineGunTurret::Price);
     // Reference: Class Member Function Pointer and std::bind.
     btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 0));
     UIGroup->AddNewControlObject(btn);
+    AddNewObject(new Engine::Label("80", "pirulen.ttf", 20, Sandpos + 14 + 32, 136+75 , 0, 0, 0, 255, 0.5, 0.5));
     // Button 2
     btn = new TurretButton("play/floor.png", "play/dirt.png",
-                           Engine::Sprite("play/tower-base.png", Sandpos + 86, 136, 0, 0, 0, 0),
-                           Engine::Sprite("play/turret-2.png", Sandpos + 86, 136 - 8, 0, 0, 0, 0), Sandpos + 86, 136, LaserTurret::Price);
+            Engine::Sprite("play/tower-base.png", Sandpos + 86, 136, 0, 0, 0, 0),
+            Engine::Sprite("play/turret-2.png", Sandpos + 86, 136 - 8, 0, 0, 0, 0), Sandpos + 86, 136, LaserTurret::Price);
     btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 1));
     UIGroup->AddNewControlObject(btn);
+    AddNewObject(new Engine::Label("360", "pirulen.ttf", 20, Sandpos + 86 + 32, 136+75 , 0, 0, 0, 255, 0.5, 0.5));
     // Button 3
     btn = new TurretButton("play/floor.png", "play/dirt.png",
-                        Engine::Sprite("play/tower-base.png", Sandpos + 158, 136, 0, 0, 0, 0),
-                        Engine::Sprite("play/turret-7.png", Sandpos + 158, 136 - 8, 0, 0, 0, 0), Sandpos + 158, 136, LaserSource::Price);
+            Engine::Sprite("play/tower-base.png", Sandpos + 158, 136, 0, 0, 0, 0),
+            Engine::Sprite("play/turret-7.png", Sandpos + 158, 136 - 8, 0, 0, 0, 0), Sandpos + 158, 136, LaserSource::Price);
     btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 2)); // 使用 ID 2 表示 LaserSource
     UIGroup->AddNewControlObject(btn);
+    AddNewObject(new Engine::Label("500", "pirulen.ttf", 20, Sandpos + 158 + 32, 136+75 , 0, 0, 0, 255, 0.5, 0.5));
     //Button 4
-    
     Shovel *shl = new Shovel("play/floor.png", "play/dirt.png",
-                           Engine::Sprite("play/shovel-base.png", Sandpos + 230, 136, 50, 50, -0.14, -0.14),
-                           Engine::Sprite("play/shovel.png", Sandpos + 230, 136 - 8, 0, 0, 0, 0), Sandpos + 230, 136, 0);
+            Engine::Sprite("play/shovel-base.png", Sandpos + 230, 136, 50, 50, -0.14, -0.14),
+            Engine::Sprite("play/shovel.png", Sandpos + 230, 136 - 8, 0, 0, 0, 0), Sandpos + 230, 136, 0);
     shl->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 3));
     UIGroup->AddNewControlObject(shl);
     
     //Button 5
     TurretButton* TankfighterBtn = new TurretButton("play/floor.png", "play/dirt.png",
-        Engine::Sprite("play/tower-base.png", Sandpos + 14, 136 + 64 + 16, 0, 0, 0, 0),
-        Engine::Sprite("play/enemy-4.png", Sandpos + 14 + 7, 136 + 64 + 16 + 7, 0, 0, 0, 0), Sandpos + 14, 136 + 64 + 16, TankFighter::Price);
+            Engine::Sprite("play/tower-base.png", Sandpos + 14, 136 + 101, 0, 0, 0, 0),
+            Engine::Sprite("play/enemy-4.png", Sandpos + 14 + 7, 136 + 103, 0, 0, 0, 0), Sandpos + 14, 136 + 100, TankFighter::Price);
     TankfighterBtn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 4));
     UIGroup->AddNewControlObject(TankfighterBtn);
+    AddNewObject(new Engine::Label("100", "pirulen.ttf", 20, Sandpos + 14 + 32, 136 +100 +75 , 0, 0, 0, 255, 0.5, 0.5));
     //Button 6
     TurretButton* SwordFighterBtn = new TurretButton("play/floor.png", "play/dirt.png",
-        Engine::Sprite("play/floor.png", Sandpos + 14 + 64 + 8, 136 + 64 + 16 , 0, 0, 0, 0),
-        Engine::Sprite("play/Swordman.png", Sandpos + 14 + 7 + 64 + 8, 136 + 64 + 16 + 7, 0, 0, 0, 0), Sandpos + 14 + 64 + 8, 136  + 16 + 64, SwordFighter::Price);
+            Engine::Sprite("play/light-7.png", Sandpos + 14 + 64 + 8, 136 + 101 , 64, 64, 0, 0),
+            Engine::Sprite("play/Swordman.png", Sandpos + 14 + 7 + 64 + 5, 136 + 101, 0, 0, 0, 0), Sandpos + 14 +64 +8, 136 +100, SwordFighter::Price);
     SwordFighterBtn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 5));
     UIGroup->AddNewControlObject(SwordFighterBtn);
+    AddNewObject(new Engine::Label("250", "pirulen.ttf", 20, Sandpos + 14 +64 +8 + 32, 136 +100 +75 , 0, 0, 0, 255, 0.5, 0.5));
     //Back Button
     int halfW = w / 2;
     int halfH = h / 2;
     Engine::ImageButton *btnn;
-    btnn = new Engine::ImageButton("stage-select/dirt.png", "stage-select/floor.png", halfW + 510, halfH + 100, 270, 75);
+    btnn = new Engine::ImageButton("stage-select/dirt.png", "stage-select/floor.png", halfW + 510, halfH + 80, 270, 75);
     btnn->SetOnClickCallback(std::bind(&PlayScene::BacktoStageSelect,this));
     AddNewControlObject(btnn);
-    AddNewObject(new Engine::Label("Back", "pirulen.ttf", 40, halfW + 650, halfH + 140, 0, 0, 0, 255, 0.5, 0.5));
+    AddNewObject(new Engine::Label("Back", "pirulen.ttf", 40, halfW + 650, halfH + 120, 0, 0, 0, 255, 0.5, 0.5));
     
     // Pause / Continue Button
     static bool paused = false;
-    auto PauseLabel = new Engine::Label("Pause", "pirulen.ttf", 32, halfW + 650, halfH + 40, 0, 0, 0, 255, 0.5, 0.5);
+    auto PauseLabel = new Engine::Label("Pause", "pirulen.ttf", 36, halfW + 650, halfH + 20, 0, 0, 0, 255, 0.5, 0.5);
     
-    btnn = new Engine::ImageButton("stage-select/dirt.png", "stage-select/floor.png", halfW + 510, halfH , 270, 75);
+    btnn = new Engine::ImageButton("stage-select/dirt.png", "stage-select/floor.png", halfW + 510, halfH-20 , 270, 75);
     btnn->SetOnClickCallback([this,PauseLabel]() mutable {
         if (SpeedMult != 0) {
             SpeedMult = 0;

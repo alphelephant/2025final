@@ -15,14 +15,14 @@ void InfoScene::Initialize() {
         {"play/enemy-6.png", "Boomer",20,9999,0,500},
         {"play/enemy-9.png", "Pulsefiend",100,5,17,200},
         {"play/enemy-10.png", "Sniper",270,80,8,40},
-        {"play/enemy-7.png", "Destroyer",210,20,40,150}
+        {"play/enemy-7.png", "Destroyer",210,20,40,120}
     };
     turretItems = {
         {"play/turret-1.png", "Gun",250,5,10,200},
         {"play/turret-2.png", "Cannon",200,20,133,400},
         {"play/turret-7.png", "Laser",150,200,100,600},
-        {"play/enemy-4.png", "Fighter",200,200,100,150},
-        {"play/Swordman.png", "Swordmaster",280,60,150,110}
+        {"play/enemy-4.png", "Fighter",290,200,100,100},
+        {"play/Swordman.png", "Swordmaster",210,60,171,140}
     };
 
     int w = Engine::GameEngine::GetInstance().GetScreenSize().x;
